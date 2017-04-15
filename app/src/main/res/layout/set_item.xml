@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp">
+
+    <Button
+        android:id="@+id/setItem"
+        android:layout_width="240dp"
+        android:layout_height="62dp"
+        android:textColor="@color/colorText"
+        android:layout_gravity="center_horizontal"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:textStyle="normal|bold"
+        android:ellipsize="start"
+        android:padding="8dp"
+        android:background="@drawable/round_corners"
+        android:elevation="2dp"
+        android:paddingBottom="8dp"
+        />
+
+</LinearLayout>
