@@ -40,9 +40,16 @@ public class NetworkHelper {
                 final ResultListener listener = mListeners.remove(requestId);
 
                 if (listener != null) { //TODO надо различать пришедшие ответы на разные запросы
-                    final String result = intent.getStringExtra(NetworkIntentService.EXTRA_WEB_RESULT);
-                    final boolean success = intent.getAction().equals(NetworkIntentService.ACTION_WEB_RESULT_SUCCESS);
-                    listener.onResult(success, result);
+                    if(intent.getStringExtra(NetworkIntentService.EXTRA_RESULT_TYPE)
+                            .equals(NetworkIntentService.EXTRA_ALL_DECKS_RESULT)){
+                        final String result = intent.getStringExtra(NetworkIntentService.EXTRA_DECKS_RESULT);
+                        final boolean success = intent.getAction().equals(NetworkIntentService.ACTION_WEB_RESULT_SUCCESS);
+                        listener.onResult(success, result);
+                    } else {
+                        final String result = intent.getStringExtra(NetworkIntentService.EXTRA_WEB_RESULT);
+                        final boolean success = intent.getAction().equals(NetworkIntentService.ACTION_WEB_RESULT_SUCCESS);
+                        listener.onResult(success, result);
+                    }
                 }
             }
         }, filter);
@@ -60,7 +67,7 @@ public class NetworkHelper {
         return mIdCounter++;
     }
 
-    int viewAllDecksRequest(final Context context, final ResultListener listener) {
+    public int viewAllDecksRequest(final Context context, final ResultListener listener) {
         mListeners.put(mIdCounter, listener);
         Intent intent = new Intent(context, NetworkIntentService.class);
         intent.setAction(NetworkIntentService.ACTION_VIEW_DECKS);

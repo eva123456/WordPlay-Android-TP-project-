@@ -26,8 +26,9 @@ class NetworkRest {
     public String processAllDecks() throws IOException {
         Request request = (new Request.Builder()).url("https://glacial-everglades-25374.herokuapp.com/decks_list/").build();
         Response response = this.httpClient.newCall(request).execute();
-        Log.d(TAG, response.body().string());
-        return response.body().string();
+        final String result = response.body().string();
+        Log.d(TAG, result);
+        return result;
     }
 
 }

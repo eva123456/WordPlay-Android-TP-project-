@@ -12,8 +12,11 @@ public class NetworkIntentService extends IntentService{
 
     private final static String TAG = NetworkIntentService.class.getSimpleName();
 
+    public static final String EXTRA_RESULT_TYPE = "extra.RESULT_TYPE";
+
     public final static String ACTION_VIEW_DECKS = "action.VIEW_ALL_DECKS";
     public final static String EXTRA_DECKS_RESULT = "extra.ALL_DECKS_RESULT";
+    public static final String EXTRA_ALL_DECKS_RESULT = "extra.RESULT_ALL_DECKS";
 
     public final static String ACTION_WEB = "action.WEB";
     public final static String EXTRA_WEB_TEXT = "extra.WEB_TEXT";
@@ -37,13 +40,13 @@ public class NetworkIntentService extends IntentService{
                 handleActionWeb(text, requestId);
             } else if(ACTION_VIEW_DECKS.endsWith(action)){
                 final int requestId = intent.getIntExtra(EXTRA_REQUEST_ID, -1);
-                handleActionViewAll(requestId);
+                handleActionViewAllDecks(requestId);
             }
 
         }
     }
 
-    private void handleActionViewAll(final int requestId){
+    private void handleActionViewAllDecks(final int requestId){
         String result;
         Log.d(TAG, " Service get request for looking deck list");
         boolean success = true;
@@ -59,6 +62,7 @@ public class NetworkIntentService extends IntentService{
         }
 
         final Intent intent = new Intent(success ? ACTION_WEB_RESULT_SUCCESS : ACTION_WEB_RESULT_ERROR);
+        intent.putExtra(EXTRA_RESULT_TYPE, EXTRA_ALL_DECKS_RESULT);
         intent.putExtra(EXTRA_DECKS_RESULT, result);
         intent.putExtra(EXTRA_REQUEST_ID, requestId);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);

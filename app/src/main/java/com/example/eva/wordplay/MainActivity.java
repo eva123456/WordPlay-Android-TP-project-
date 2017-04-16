@@ -69,9 +69,9 @@ public class MainActivity extends AppCompatActivity implements  NetworkHelper.Re
         fTransaction.commit();
     }
 
-    public void onSendClick(final String text) {
-        int mRequestId = NetworkHelper.getInstance(this).sendRequest(this, text, this);
-        Log.d(TAG, "Button clicked " + mRequestId);
+    public void deckListImport() {
+        int mRequestId = NetworkHelper.getInstance(this).viewAllDecksRequest(this, this);
+        Log.d(TAG, "We want to draw list of external decks ");
     }
 
     @Override
@@ -103,8 +103,7 @@ public class MainActivity extends AppCompatActivity implements  NetworkHelper.Re
 
             if(currentFragmentIndex != position) {
                 if(pages[position].equals(importPage)){
-                    Log.d(TAG, "We want to draw list of external decks");
-                    onSendClick("asda");
+                    deckListImport();
                 }
 
                 clearContainer(pages[currentFragmentIndex]);
