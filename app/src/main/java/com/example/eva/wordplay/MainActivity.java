@@ -17,10 +17,13 @@ import com.example.eva.wordplay.fragments.AboutFragment;
 import com.example.eva.wordplay.fragments.BaseFragment;
 import com.example.eva.wordplay.fragments.CreationFragment;
 import com.example.eva.wordplay.fragments.ImportFragment;
+import com.example.eva.wordplay.network.NetworkHelper;
 
 import static java.lang.String.valueOf;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements  NetworkHelper.ResultListener{
+
+    private final String TAG = MainActivity.class.getSimpleName();
 
     private String[] navigationItems;
     private DrawerLayout drawerLayout;
@@ -66,12 +69,28 @@ public class MainActivity extends AppCompatActivity {
         fTransaction.commit();
     }
 
+    public void onSendClick(final String text) {
+        int mRequestId = NetworkHelper.getInstance(this).sendRequest(this, text, this);
+        Log.d(TAG, "Button clicked " + mRequestId);
+    }
+
+    @Override
+    public void onResult(final boolean success, final String result) {
+        /*if (success) {
+            resultTextView.setText(String.format("OK: %s", result));
+        } else {
+            resultTextView.setText(String.format("FAIL: %s", result));
+        }*/
+        Log.d(TAG, "Activity get result " + result);
+    }
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         return super.onPrepareOptionsMenu(menu);
     }
 
     public class NavigationDrawerListener implements AdapterView.OnItemClickListener {
+        private final String TAG = NavigationDrawerListener.class.getSimpleName();
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             selectItem(position);
@@ -79,9 +98,15 @@ public class MainActivity extends AppCompatActivity {
 
         private void selectItem(int position) {
 
+
             Fragment[] pages = {basePage, creationPage, importPage, aboutPage};
 
             if(currentFragmentIndex != position) {
+                if(pages[position].equals(importPage)){
+                    Log.d(TAG, "We want to draw list of external decks");
+                    onSendClick("asda");
+                }
+
                 clearContainer(pages[currentFragmentIndex]);
                 setPage(pages[position]);
                 currentFragmentIndex = position;

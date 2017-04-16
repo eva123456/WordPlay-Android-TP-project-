@@ -21,7 +21,7 @@ public class NetworkHelper {
     private NetworkHelper() {
     }
 
-    synchronized static NetworkHelper getInstance(final Context context) {
+    public synchronized static NetworkHelper getInstance(final Context context) {
         if (instance == null) {
             instance = new NetworkHelper();
             instance.initBroadcastReceiver(context);
@@ -48,7 +48,7 @@ public class NetworkHelper {
         }, filter);
     }
 
-    int sendRequest(final Context context, final String text, final ResultListener listener) {
+    public int sendRequest(final Context context, final String text, final ResultListener listener) {
         mListeners.put(mIdCounter, listener);
         Log.d(TAG,"Get request " + text);
         Intent intent = new Intent(context, NetworkIntentService.class);
@@ -70,7 +70,7 @@ public class NetworkHelper {
         return mIdCounter++;
     }
 
-    interface ResultListener {
+    public interface ResultListener {
         void onResult(final boolean success, final String result);
     }
 }
