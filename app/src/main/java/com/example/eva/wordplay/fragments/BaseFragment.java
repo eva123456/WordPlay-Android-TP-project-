@@ -8,17 +8,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.example.eva.wordplay.R;
+import com.example.eva.wordplay.data.DataHelper;
+import com.example.eva.wordplay.data.WordSet;
 
-import java.io.Console;
+import java.util.ArrayList;
+
 
 /**
  * Created by eva on 12.04.17.
  */
 
-public class BaseFragment extends Fragment{
+public class BaseFragment extends Fragment implements DataHelper.ResultListener{
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -28,36 +31,38 @@ public class BaseFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.base_fragment, null);
+        Log.d("WPLogs", "BaseFragment:onCreateView");
 
-        String[] dataSet = getDataSet();
-
+        int requestId = DataHelper.getInstance(getActivity()).getLastSavedSets(getActivity(), this);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new RecyclerAdapter(dataSet);
-        recyclerView.setAdapter(adapter);
         recyclerView.addOnItemTouchListener(new RecyclerClickListener(getActivity()) {
             @Override
             public void onItemClick(RecyclerView recyclerView, View view, int position) {
-                   /*String TAG = "WPLogs";
-                   Log.d(TAG, "Deck card was clicked!!!");
-                   Log.d(TAG, "VIEW = " + view.toString());
-                   Log.d(TAG, "POSITION = " + String.valueOf(position));*/
+                Toast.makeText(getActivity(), "Сlick on the card" , Toast.LENGTH_SHORT).show();
             }
         });
 
         return view;
     }
 
-    private String[] getDataSet() {
+    @Override
+    public void onStringResult(boolean success, String result) {
 
-        String[] mDataSet = new String[100];
-        for (int i = 0; i < 100; i++) {
-            mDataSet[i] = "my_deck_item_" + i;
-        }
-        return mDataSet;
     }
 
+    @Override
+    public void onSetResult(boolean success, WordSet result) {
 
+    }
+
+    @Override
+    public void onArraySetResult(boolean success, ArrayList<WordSet> result) {
+
+        adapter = new RecyclerAdapter(result);
+        recyclerView.setAdapter(adapter);
+
+    }
 }

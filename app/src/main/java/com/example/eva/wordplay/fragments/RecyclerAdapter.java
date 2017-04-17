@@ -10,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.eva.wordplay.R;
+import com.example.eva.wordplay.data.WordSet;
+
+import java.util.ArrayList;
 
 /**
  * Created by eva on 14.04.17.
@@ -17,10 +20,10 @@ import com.example.eva.wordplay.R;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
-    private String[] data;
+    private ArrayList<WordSet> wordSets;
 
-    public RecyclerAdapter(String[] data){
-        this.data = data;
+    public RecyclerAdapter(ArrayList<WordSet> wordSets){
+        this.wordSets = wordSets;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -48,14 +51,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         return viewHolder;
     }
 
-    @Override
+     @Override
     public void onBindViewHolder(RecyclerAdapter.ViewHolder holder, int position) {
-        holder.deckName.setText(data[position]);
-        holder.percent.setText("75% complete");
+        holder.deckName.setText(wordSets.get(position).getName());
+        holder.percent.setText(Integer.toString(wordSets.get(position).getPercent()) + "% completed");
     }
 
     @Override
     public int getItemCount() {
-        return data.length;
+        return wordSets.size();
     }
+
 }

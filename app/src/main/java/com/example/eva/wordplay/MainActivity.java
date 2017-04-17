@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
             if(currentFragmentIndex != position) {
                 clearContainer(pages[currentFragmentIndex]);
+                
                 setPage(pages[position]);
                 currentFragmentIndex = position;
             }
