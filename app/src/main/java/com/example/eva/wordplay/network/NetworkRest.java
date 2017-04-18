@@ -56,6 +56,7 @@ class NetworkRest {
             Log.d(TAG, word.getWord());
             targetSet.addWord(word.getWord(), word.getTranslation());
         }
+        //targetSet.show();
         return targetSet;
     }
 

@@ -68,9 +68,8 @@ public class NetworkIntentService extends IntentService{
             result = null;
             success = false;
         }
-
         final Intent intent = new Intent(success ? ACTION_WEB_RESULT_SUCCESS : ACTION_WEB_RESULT_ERROR);
-        intent.putExtra(EXTRA_RESULT_TYPE, EXTRA_TYPE_ALL_DECKS_);
+        intent.putExtra(EXTRA_RESULT_TYPE, EXTRA_TYPE_LOAD_DECK);
         intent.putExtra(EXTRA_WORD_SET, targetSet);
         intent.putExtra(EXTRA_REQUEST_ID, requestId);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);

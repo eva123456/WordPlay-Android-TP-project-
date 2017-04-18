@@ -1,5 +1,6 @@
 package com.example.eva.wordplay.network;
 
+import android.app.IntentService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -49,10 +50,14 @@ public class NetworkHelper {
                                 .getSerializableExtra(NetworkIntentService.EXTRA_DECKS_RESULT);
                         final boolean success = intent.getAction().equals(NetworkIntentService.ACTION_WEB_RESULT_SUCCESS);
                         listener.onServerSetListResult(serverSets);
-                    } else {
-                        final String result = intent.getStringExtra(NetworkIntentService.EXTRA_WEB_RESULT);
+
+                    } else if(intent.getStringExtra(NetworkIntentService.EXTRA_RESULT_TYPE)
+                            .equals(NetworkIntentService.EXTRA_TYPE_LOAD_DECK)) {
+
                         final boolean success = intent.getAction().equals(NetworkIntentService.ACTION_WEB_RESULT_SUCCESS);
-                        listener.onResult(success, result);
+                        final WordSet resultSet = (WordSet)intent.getSerializableExtra(NetworkIntentService.EXTRA_WORD_SET);
+                        //resultSet.show();
+                        listener.onDeckLoadedResult(success, resultSet);
                     }
                 }
             }
@@ -78,6 +83,16 @@ public class NetworkHelper {
         intent.putExtra(NetworkIntentService.EXTRA_REQUEST_ID, mIdCounter);
         context.startService(intent);
 
+        return mIdCounter++;
+    }
+
+    public int loadDeck(final Context context, final WordSet targetSet, final ResultListener listener){
+        mListeners.put(mIdCounter,listener);
+        Intent intent = new Intent(context, NetworkIntentService.class);
+        intent.setAction(NetworkIntentService.ACTION_LOAD_DECK);
+        intent.putExtra(NetworkIntentService.EXTRA_WORD_SET, targetSet);
+        intent.putExtra(NetworkIntentService.EXTRA_REQUEST_ID, mIdCounter);
+        context.startService(intent);
         return mIdCounter++;
     }
 

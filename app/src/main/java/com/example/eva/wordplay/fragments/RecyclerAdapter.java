@@ -62,4 +62,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         return wordSets.size();
     }
 
+    public ArrayList<WordSet> getWordSets() {
+        if(wordSets!=null)
+            return wordSets;
+        else
+            return null;
+    }
 }

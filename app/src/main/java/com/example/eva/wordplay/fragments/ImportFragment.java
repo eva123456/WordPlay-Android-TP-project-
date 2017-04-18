@@ -25,10 +25,10 @@ import static com.example.eva.wordplay.R.id.recyclerViewImport;
  * Created by eva on 15.04.17.
  */
 
-public class ImportFragment extends Fragment implements DataHelper.ResultListener, NetworkHelper.ResultListener{
+public class ImportFragment extends Fragment implements  NetworkHelper.ResultListener{
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
+    private RecyclerAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
     @Override
@@ -39,6 +39,13 @@ public class ImportFragment extends Fragment implements DataHelper.ResultListene
 
         //int requestId = DataHelper.getInstance(getActivity()).getLastSavedSets(getActivity(), this);
         int req = NetworkHelper.getInstance(getActivity()).viewAllDecksRequest(getActivity(), this);
+
+        //WordSet targetSet = new WordSet();
+        //targetSet.setName("Animals");
+        //getActivity();
+        //NetworkHelper.getInstance(getActivity()).loadDeck(getActivity(), targetSet, this);
+
+
         recyclerView = (RecyclerView) view.findViewById(recyclerViewImport);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -46,29 +53,24 @@ public class ImportFragment extends Fragment implements DataHelper.ResultListene
         recyclerView.addOnItemTouchListener(new RecyclerClickListener(getActivity()) {
             @Override
             public void onItemClick(RecyclerView recyclerView, View view, int position) {
-                Toast.makeText(getActivity(), "Сlick on the card" , Toast.LENGTH_SHORT).show();
+                if(position < adapter.getItemCount()) {
+                    Toast.makeText(getActivity(), "Сlick on the card " +
+                            adapter.getWordSets().get(position).getName(), Toast.LENGTH_SHORT).show();
+                    loadDeck(adapter.getWordSets().get(position).getName());
+                }
             }
         });
 
         return view;
     }
 
-    @Override
-    public void onStringResult(boolean success, String result) {
-
-    }
-
-    @Override
-    public void onSetResult(boolean success, WordSet result) {
-
-    }
-
-    @Override
-    public void onArraySetResult(boolean success, ArrayList<WordSet> result) {
-
-        adapter = new RecyclerAdapter(result);
-        recyclerView.setAdapter(adapter);
-
+    private void loadDeck(String deckName){
+        if(!deckName.isEmpty()) {
+            WordSet targetSet = new WordSet();
+            targetSet.setName(deckName);
+            //getActivity();
+            NetworkHelper.getInstance(getActivity()).loadDeck(getActivity(), targetSet, this);
+        }
     }
 
     @Override
