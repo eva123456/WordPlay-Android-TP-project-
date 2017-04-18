@@ -135,20 +135,6 @@ public class DataHelper {
         }, filter);
     }
 
-
-
-    public int sendTextRequest(final Context context, final String text, final ResultListener listener) {
-        mListeners.put(mIdCounter, listener);
-        Log.d(TAG,"Get request " + text);
-        Intent intent = new Intent(context, DataService.class);
-        intent.setAction(DataService.ACTION_PROCESS_TEXT);
-        intent.putExtra(DataService.EXTRA_PROCESS_TEXT, text);
-        intent.putExtra(DataService.EXTRA_REQUEST_ID, mIdCounter);
-        context.startService(intent);
-
-        return mIdCounter++;
-    }
-
     public int add(Context context, WordSet newSet, final ResultListener listener){
         mListeners.put(mIdCounter, listener);
         //Log.d(TAG,"Get request " + text);

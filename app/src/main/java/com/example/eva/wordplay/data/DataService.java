@@ -45,15 +45,6 @@ public class DataService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             final String action = intent.getAction();
-            if (ACTION_PROCESS_TEXT.equals(action)) {
-                final String text = intent.getStringExtra(EXTRA_PROCESS_TEXT);
-                final int requestId = intent.getIntExtra(EXTRA_REQUEST_ID, -1);
-                try {
-                    handleActionWeb(text, requestId);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
             if (ACTION_INSERT_SET.equals(action)) {
                 final WordSet newSet = (WordSet) intent.getSerializableExtra(EXTRA_SET_OBJECT);
                 final int requestId = intent.getIntExtra(EXTRA_REQUEST_ID, -1);
@@ -122,29 +113,6 @@ public class DataService extends IntentService {
         Intent intent = new Intent(success ? ACTION_SUCCESS : ACTION_FAIL);
         intent.putExtra(EXTRA_REQUEST_ID, rId);
         intent.putExtra(EXTRA_RESULT_TYPE, EXTRA_INSERT_RESULT);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-    }
-
-
-    private void handleActionWeb(final String text, final int rId) throws Exception {
-        String result;
-
-        boolean success = true;
-        try {
-            result = DataProcessor.processText(text);
-            if (TextUtils.isEmpty(result)) {
-                result = "result is empty";
-                success = false;
-            }
-        } catch (IOException ex) {
-            result = ex.getMessage();
-            success = false;
-        }
-
-        final Intent intent = new Intent(success ? ACTION_TEXT_RESULT_SUCCESS : ACTION_TEXT_RESULT_ERROR);
-        intent.putExtra(EXTRA_TEXT_RESULT, result);
-        intent.putExtra(EXTRA_REQUEST_ID, rId);
-        intent.putExtra(EXTRA_RESULT_TYPE, EXTRA_TEXT_RESULT);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 

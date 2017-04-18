@@ -21,10 +21,6 @@ import static com.example.eva.wordplay.R.attr.layoutManager;
 import static com.example.eva.wordplay.R.id.recyclerView;
 import static com.example.eva.wordplay.R.id.recyclerViewImport;
 
-/**
- * Created by eva on 15.04.17.
- */
-
 public class ImportFragment extends Fragment implements  NetworkHelper.ResultListener{
 
     private RecyclerView recyclerView;
@@ -37,15 +33,7 @@ public class ImportFragment extends Fragment implements  NetworkHelper.ResultLis
         View view = inflater.inflate(R.layout.import_fragment, null);
         Log.d("WPLogs", "BaseFragment:onCreateView");
 
-        //int requestId = DataHelper.getInstance(getActivity()).getLastSavedSets(getActivity(), this);
-        int req = NetworkHelper.getInstance(getActivity()).viewAllDecksRequest(getActivity(), this);
-
-        //WordSet targetSet = new WordSet();
-        //targetSet.setName("Animals");
-        //getActivity();
-        //NetworkHelper.getInstance(getActivity()).loadDeck(getActivity(), targetSet, this);
-
-
+        NetworkHelper.getInstance(getActivity()).viewAllDecksRequest(getActivity(), this);
         recyclerView = (RecyclerView) view.findViewById(recyclerViewImport);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -68,20 +56,18 @@ public class ImportFragment extends Fragment implements  NetworkHelper.ResultLis
         if(!deckName.isEmpty()) {
             WordSet targetSet = new WordSet();
             targetSet.setName(deckName);
-            //getActivity();
             NetworkHelper.getInstance(getActivity()).loadDeck(getActivity(), targetSet, this);
         }
     }
 
     @Override
-    public void onResult(final boolean success, final String result){
-
-    }
-
-    @Override
     public void onServerSetListResult(final ArrayList<WordSet> serverSets){
-        adapter = new RecyclerAdapter(serverSets);
-        recyclerView.setAdapter(adapter);
+        if(serverSets==null){
+            Toast.makeText(getActivity(), "No Internet connection =\\ ", Toast.LENGTH_SHORT).show();
+        } else {
+            adapter = new RecyclerAdapter(serverSets);
+            recyclerView.setAdapter(adapter);
+        }
     }
 
     @Override

@@ -18,22 +18,6 @@ public class DataProcessor {
     private final static String LOG_TAG = DataProcessor.class.getSimpleName();
     private final static Map<String, String> mCache = new Hashtable<>();
 
-    public static String processText(final String text) throws Exception {
-
-        if (mCache.containsKey(text)) {
-            Log.i(LOG_TAG, "Text was found in cache. Returning.");
-            return mCache.get(text);
-        } else {
-            Log.i(LOG_TAG, "Text was not found in cache. Making db request.");
-            final String result = DataMethod.getInstance().processText(text);
-            if (result != null && !result.isEmpty()) {
-                mCache.put(text, result);
-
-            }
-            return result;
-        }
-    }
-
     public static void insertSet(final WordSet newSet){
         String setName = newSet.getName();
         DataMethod.getInstance().insertSet(setName);

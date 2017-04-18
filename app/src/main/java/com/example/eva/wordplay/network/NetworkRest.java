@@ -2,6 +2,7 @@ package com.example.eva.wordplay.network;
 
 import android.util.Log;
 
+import com.example.eva.wordplay.R;
 import com.example.eva.wordplay.data.Word;
 import com.example.eva.wordplay.data.WordSet;
 import com.google.gson.Gson;
@@ -20,18 +21,15 @@ class NetworkRest {
 
     private final OkHttpClient httpClient = new OkHttpClient();
 
+    private final static String BACK_URL = "https://glacial-everglades-25374.herokuapp.com/";
+
+
     NetworkRest() {
     }
 
-    String processText(final String text) throws IOException {
-        Request request = (new Request.Builder()).url("https://glacial-everglades-25374.herokuapp.com/test/").build();
-        Response response = this.httpClient.newCall(request).execute();
-        Log.d(TAG, response.body().string());
-        return "asd";
-    }
 
     ArrayList<WordSet> processAllDecks() throws IOException {
-        Request request = (new Request.Builder()).url("https://glacial-everglades-25374.herokuapp.com/decks_list/").build();
+        Request request = (new Request.Builder()).url(BACK_URL+"decks_list/").build();
         Response response = this.httpClient.newCall(request).execute();
         final String result = response.body().string();
         Log.d(TAG, result);
@@ -45,8 +43,7 @@ class NetworkRest {
     }
 
     WordSet loadSet(WordSet targetSet) throws IOException{
-        Request request = (new Request.Builder()).url("https://glacial-everglades-25374.herokuapp"+
-                ".com/decks_content?deck_name="+targetSet.getName()).build();
+        Request request = (new Request.Builder()).url(BACK_URL+"decks_content?deck_name="+targetSet.getName()).build();
         Response response = this.httpClient.newCall(request).execute();
         final String result = response.body().string();
         Log.d(TAG, result);
@@ -56,7 +53,6 @@ class NetworkRest {
             Log.d(TAG, word.getWord());
             targetSet.addWord(word.getWord(), word.getTranslation());
         }
-        //targetSet.show();
         return targetSet;
     }
 

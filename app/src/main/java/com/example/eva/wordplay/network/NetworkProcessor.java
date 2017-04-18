@@ -12,23 +12,10 @@ import java.util.Map;
 public class NetworkProcessor {
     private final static String LOG_TAG = NetworkProcessor.class.getSimpleName();
 
-    private final static Map<String, String> mCache = new Hashtable<>();
+    //private final static Map<String, String> mCache = new Hashtable<>();
 
     private static ArrayList<WordSet> allDeckCache;
 
-    public static String processText(final String text) throws IOException {
-        if (mCache.containsKey(text)) {
-            Log.i(LOG_TAG, "Text was found in cache. Returning.");
-            return mCache.get(text);
-        } else {
-            Log.i(LOG_TAG, "Text was not found in cache. Making server request.");
-            final String result = new NetworkRest().processText(text);
-            if (result != null && !result.isEmpty()) {
-                mCache.put(text, result);
-            }
-            return result;
-        }
-    }
 
     public static ArrayList<WordSet> processAllDecks() throws IOException {
         if (allDeckCache!=null) {

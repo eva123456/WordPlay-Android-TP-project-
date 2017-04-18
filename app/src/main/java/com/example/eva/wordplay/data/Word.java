@@ -1,9 +1,5 @@
 package com.example.eva.wordplay.data;
 
-/**
- * Created by victor on 18.04.17.
- */
-
 public class Word {
     private String word;
 

@@ -30,7 +30,6 @@ public class DataMethod {
     }
 
     public String processText(String name) throws Exception {
-
         int id = (int) (Math.random()*100);
         return Integer.toString(id);
     }
