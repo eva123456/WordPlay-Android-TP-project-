@@ -17,10 +17,6 @@ import com.example.eva.wordplay.data.WordSet;
 import java.util.ArrayList;
 
 
-/**
- * Created by eva on 12.04.17.
- */
-
 public class BaseFragment extends Fragment implements DataHelper.ResultListener{
 
     private RecyclerView recyclerView;
@@ -31,7 +27,6 @@ public class BaseFragment extends Fragment implements DataHelper.ResultListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.base_fragment, null);
-        Log.d("WPLogs", "BaseFragment:onCreateView");
 
         int requestId = DataHelper.getInstance(getActivity()).getLastSavedSets(getActivity(), this);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
@@ -63,6 +58,5 @@ public class BaseFragment extends Fragment implements DataHelper.ResultListener{
 
         adapter = new RecyclerAdapter(result);
         recyclerView.setAdapter(adapter);
-
     }
 }

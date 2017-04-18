@@ -15,13 +15,8 @@ import com.example.eva.wordplay.data.WordSet;
 
 import java.util.ArrayList;
 
-/**
- * Created by eva on 12.04.17.
- */
-
 public class CreationFragment extends Fragment implements View.OnClickListener, DataHelper.ResultListener{
 
-    final String TAG = "WPLogs";
     private Button btnAdd, btnCreate;
     private EditText wordView, transaltionView, nameView;
     private View view;

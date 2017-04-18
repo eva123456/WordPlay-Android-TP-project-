@@ -14,9 +14,6 @@ import com.example.eva.wordplay.data.WordSet;
 
 import java.util.ArrayList;
 
-/**
- * Created by eva on 14.04.17.
- */
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
@@ -39,7 +36,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             deckName = (TextView) itemView.findViewById(R.id.deckName);
             percent = (TextView) itemView.findViewById(R.id.percent);
             justForFun = (ImageView) itemView.findViewById(R.id.picture);
-
         }
     }
 

@@ -8,9 +8,6 @@ import android.view.ViewGroup;
 
 import com.example.eva.wordplay.R;
 
-/**
- * Created by eva on 15.04.17.
- */
 
 public class AboutFragment extends Fragment {
 

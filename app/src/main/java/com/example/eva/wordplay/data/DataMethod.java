@@ -1,19 +1,10 @@
 package com.example.eva.wordplay.data;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Looper;
 import android.util.Log;
-
 import java.util.ArrayList;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
-/**
- * Created by eva on 17.04.17.
- */
 
 public class DataMethod {
 
@@ -27,12 +18,6 @@ public class DataMethod {
 
     public synchronized static DataMethod getInstance() {
         return instance;
-    }
-
-    public String processText(String name) throws Exception {
-
-        int id = (int) (Math.random()*100);
-        return Integer.toString(id);
     }
 
     public void insertSet(final String name){
@@ -84,8 +69,6 @@ public class DataMethod {
         try {
             while (cursor.moveToNext()) {
                 name = cursor.getString(cursor.getColumnIndex("name"));
-                Log.d("WPLogs", "get name from setTable : name = " + name);
-                getSetInfo(name).show();
                 tmp.add(getSetInfo(name));
             }
         } finally {

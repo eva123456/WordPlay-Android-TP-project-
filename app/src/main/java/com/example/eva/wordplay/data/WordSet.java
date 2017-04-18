@@ -1,16 +1,8 @@
 package com.example.eva.wordplay.data;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.Log;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-/**
- * Created by eva on 15.04.17.
- */
 
 public class WordSet implements Serializable{
 
@@ -43,24 +35,13 @@ public class WordSet implements Serializable{
     }
 
     public int getPercent(){
-        /*int all = words.size();
+        int all = words.size();
         int correct = correctWords.size();
-        return 100*(correct/all);*/
-        return 70;
+        return (all == 0) ? 0 : 100*(correct/all);
     }
 
     public void mixWords(){
 
     }
-
-    public void show(){
-        Log.d("WPLogs", "----------------------------------------------------------------------------------");
-        Log.d("WPLogs", " SET :: NAME = " + name);
-        for (String key : words.keySet()){
-            Log.d("WPLogs", " WORD : " + key + ", TRANSLATION : " + words.get(key));
-        }
-        Log.d("WPLogs", "----------------------------------------------------------------------------------");
-    }
-
 
 }

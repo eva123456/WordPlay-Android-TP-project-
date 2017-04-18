@@ -8,20 +8,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.StringTokenizer;
 
-/**
- * Created by eva on 17.04.17.
- */
 
 public class DataHelper {
 
-    private final static String TAG = "WPLogs";
     private int mIdCounter = 1;
     private final Map<Integer, ResultListener> mListeners = new Hashtable<>();
 
@@ -90,8 +84,6 @@ public class DataHelper {
 
     private void initBroadcastReceiver(Context context) {
         final IntentFilter filter = new IntentFilter();
-        filter.addAction(DataService.ACTION_TEXT_RESULT_SUCCESS);
-        filter.addAction(DataService.ACTION_TEXT_RESULT_ERROR);
         filter.addAction(DataService.ACTION_SUCCESS);
         filter.addAction(DataService.ACTION_FAIL);
 
@@ -102,13 +94,6 @@ public class DataHelper {
                 final ResultListener listener = mListeners.remove(requestId);
 
                 if (listener != null) {
-                    if(intent.getStringExtra(DataService.EXTRA_RESULT_TYPE)
-                            .equals(DataService.EXTRA_TEXT_RESULT)){
-                        final String result = intent.getStringExtra(DataService.EXTRA_TEXT_RESULT);
-                        final boolean success = intent.getAction()
-                                .equals(DataService.ACTION_TEXT_RESULT_SUCCESS);
-                        listener.onStringResult(success, result);
-                    }
                     if(intent.getStringExtra(DataService.EXTRA_RESULT_TYPE)
                             .equals(DataService.EXTRA_INSERT_RESULT)){
                         final boolean success = intent.getAction().equals(DataService.ACTION_SUCCESS);
@@ -135,23 +120,8 @@ public class DataHelper {
         }, filter);
     }
 
-
-
-    public int sendTextRequest(final Context context, final String text, final ResultListener listener) {
-        mListeners.put(mIdCounter, listener);
-        Log.d(TAG,"Get request " + text);
-        Intent intent = new Intent(context, DataService.class);
-        intent.setAction(DataService.ACTION_PROCESS_TEXT);
-        intent.putExtra(DataService.EXTRA_PROCESS_TEXT, text);
-        intent.putExtra(DataService.EXTRA_REQUEST_ID, mIdCounter);
-        context.startService(intent);
-
-        return mIdCounter++;
-    }
-
     public int add(Context context, WordSet newSet, final ResultListener listener){
         mListeners.put(mIdCounter, listener);
-        //Log.d(TAG,"Get request " + text);
         Intent intent = new Intent(context, DataService.class);
         intent.setAction(DataService.ACTION_INSERT_SET);
         intent.putExtra(DataService.EXTRA_SET_OBJECT, newSet);
@@ -162,10 +132,8 @@ public class DataHelper {
 
     public int getLastSavedSets(Context context, final ResultListener listener){
         mListeners.put(mIdCounter, listener);
-        //Log.d(TAG,"Get request " + text);
         Intent intent = new Intent(context, DataService.class);
         intent.setAction(DataService.ACTION_GET_ALL_SETS);
-        //intent.putExtra(DataService.EXTRA_SET_OBJECT, newSet);
         intent.putExtra(DataService.EXTRA_REQUEST_ID, mIdCounter);
         context.startService(intent);
         return mIdCounter++;
@@ -173,7 +141,6 @@ public class DataHelper {
 
     public int get(Context context, final String setName, final ResultListener listener){
         mListeners.put(mIdCounter, listener);
-        //Log.d(TAG,"Get request " + text);
         Intent intent = new Intent(context, DataService.class);
         intent.setAction(DataService.ACTION_GET_SET_INFO);
         intent.putExtra(DataService.EXTRA_SET_NAME, setName);

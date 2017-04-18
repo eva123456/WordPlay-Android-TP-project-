@@ -15,14 +15,6 @@ public class DataService extends IntentService {
     public final static String EXTRA_REQUEST_ID = "extra.REQUEST_ID";
     public static final String EXTRA_RESULT_TYPE = "extra.RESULT_TYPE";
 
-    public final static String ACTION_PROCESS_TEXT = "action.PROCESS_TEXT";
-    public final static String EXTRA_PROCESS_TEXT = "extra.PROCESS_TEXT";
-    public final static String EXTRA_TEXT_RESULT = "extra.PROCESS_TEXT";
-
-    public final static String ACTION_TEXT_RESULT_SUCCESS = "action.ACTION_TEXT_RESULT_SUCCESS";
-    public final static String ACTION_TEXT_RESULT_ERROR = "action.ACTION_TEXT_RESULT_ERROR";
-
-
     public final static String ACTION_INSERT_SET = "action.INSERT_SET";
     public final static String ACTION_GET_SET_INFO = "action.GET_SET_INFO";
     public final static String ACTION_GET_ALL_SETS = "action.GET_ALL_SETS";
@@ -45,15 +37,7 @@ public class DataService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             final String action = intent.getAction();
-            if (ACTION_PROCESS_TEXT.equals(action)) {
-                final String text = intent.getStringExtra(EXTRA_PROCESS_TEXT);
-                final int requestId = intent.getIntExtra(EXTRA_REQUEST_ID, -1);
-                try {
-                    handleActionWeb(text, requestId);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+
             if (ACTION_INSERT_SET.equals(action)) {
                 final WordSet newSet = (WordSet) intent.getSerializableExtra(EXTRA_SET_OBJECT);
                 final int requestId = intent.getIntExtra(EXTRA_REQUEST_ID, -1);
@@ -124,28 +108,4 @@ public class DataService extends IntentService {
         intent.putExtra(EXTRA_RESULT_TYPE, EXTRA_INSERT_RESULT);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
-
-
-    private void handleActionWeb(final String text, final int rId) throws Exception {
-        String result;
-
-        boolean success = true;
-        try {
-            result = DataProcessor.processText(text);
-            if (TextUtils.isEmpty(result)) {
-                result = "result is empty";
-                success = false;
-            }
-        } catch (IOException ex) {
-            result = ex.getMessage();
-            success = false;
-        }
-
-        final Intent intent = new Intent(success ? ACTION_TEXT_RESULT_SUCCESS : ACTION_TEXT_RESULT_ERROR);
-        intent.putExtra(EXTRA_TEXT_RESULT, result);
-        intent.putExtra(EXTRA_REQUEST_ID, rId);
-        intent.putExtra(EXTRA_RESULT_TYPE, EXTRA_TEXT_RESULT);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-    }
-
 }
