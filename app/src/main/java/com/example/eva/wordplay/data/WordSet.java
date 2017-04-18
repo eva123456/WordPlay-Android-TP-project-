@@ -1,5 +1,7 @@
 package com.example.eva.wordplay.data;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +44,14 @@ public class WordSet implements Serializable{
 
     public void mixWords(){
 
+    }
+
+    public void show(){
+        final String TAG = "WPLogs";
+        Log.d(TAG, " SET : NAME = " + name);
+        for(String word : words.keySet()){
+            Log.d(TAG, " WROD : " + word + ", TRANSLATION : " + words.get(word));
+        }
     }
 
 }
