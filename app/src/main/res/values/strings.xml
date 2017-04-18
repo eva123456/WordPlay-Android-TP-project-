@@ -6,4 +6,5 @@
     <string name="about">About us</string>
     <string name="importDeck">Here you can import a simple deck</string>
     <string name="startWP">This page is about to start checking words from the deck</string>
+    <string name="backURL">https://glacial-everglades-25374.herokuapp.com</string>
 </resources>

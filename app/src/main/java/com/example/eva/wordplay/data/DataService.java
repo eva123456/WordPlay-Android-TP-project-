@@ -37,7 +37,6 @@ public class DataService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             final String action = intent.getAction();
-
             if (ACTION_INSERT_SET.equals(action)) {
                 final WordSet newSet = (WordSet) intent.getSerializableExtra(EXTRA_SET_OBJECT);
                 final int requestId = intent.getIntExtra(EXTRA_REQUEST_ID, -1);
