@@ -7,6 +7,9 @@ import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.example.eva.wordplay.data.WordSet;
+
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -41,10 +44,11 @@ public class NetworkHelper {
 
                 if (listener != null) { //TODO надо различать пришедшие ответы на разные запросы
                     if(intent.getStringExtra(NetworkIntentService.EXTRA_RESULT_TYPE)
-                            .equals(NetworkIntentService.EXTRA_ALL_DECKS_RESULT)){
-                        final String result = intent.getStringExtra(NetworkIntentService.EXTRA_DECKS_RESULT);
+                            .equals(NetworkIntentService.EXTRA_TYPE_ALL_DECKS_)){
+                        final ArrayList<WordSet> serverSets = (ArrayList<WordSet>)intent
+                                .getSerializableExtra(NetworkIntentService.EXTRA_DECKS_RESULT);
                         final boolean success = intent.getAction().equals(NetworkIntentService.ACTION_WEB_RESULT_SUCCESS);
-                        listener.onResult(success, result);
+                        listener.onServerSetListResult(serverSets);
                     } else {
                         final String result = intent.getStringExtra(NetworkIntentService.EXTRA_WEB_RESULT);
                         final boolean success = intent.getAction().equals(NetworkIntentService.ACTION_WEB_RESULT_SUCCESS);
@@ -79,5 +83,9 @@ public class NetworkHelper {
 
     public interface ResultListener {
         void onResult(final boolean success, final String result);
+
+        void onServerSetListResult(final ArrayList<WordSet> serverSets);
+
+        void onDeckLoadedResult(final boolean success, WordSet targetSet);
     }
 }

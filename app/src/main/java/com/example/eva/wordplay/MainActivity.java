@@ -21,7 +21,7 @@ import com.example.eva.wordplay.network.NetworkHelper;
 
 import static java.lang.String.valueOf;
 
-public class MainActivity extends AppCompatActivity implements  NetworkHelper.ResultListener{
+public class MainActivity extends AppCompatActivity{
 
     private final String TAG = MainActivity.class.getSimpleName();
 
@@ -69,20 +69,6 @@ public class MainActivity extends AppCompatActivity implements  NetworkHelper.Re
         fTransaction.commit();
     }
 
-    public void deckListImport() {
-        int mRequestId = NetworkHelper.getInstance(this).viewAllDecksRequest(this, this);
-        Log.d(TAG, "We want to draw list of external decks ");
-    }
-
-    @Override
-    public void onResult(final boolean success, final String result) {
-        /*if (success) {
-            resultTextView.setText(String.format("OK: %s", result));
-        } else {
-            resultTextView.setText(String.format("FAIL: %s", result));
-        }*/
-        Log.d(TAG, "Activity get result " + result);
-    }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -102,9 +88,6 @@ public class MainActivity extends AppCompatActivity implements  NetworkHelper.Re
             Fragment[] pages = {basePage, creationPage, importPage, aboutPage};
 
             if(currentFragmentIndex != position) {
-                if(pages[position].equals(importPage)){
-                    deckListImport();
-                }
 
                 clearContainer(pages[currentFragmentIndex]);
                 
