@@ -1,6 +1,7 @@
 package com.example.eva.wordplay.fragments;
 
-import android.app.Fragment;
+import android.app.Activity;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,7 +40,6 @@ public class BaseFragment extends Fragment implements DataHelper.ResultListener{
                 Toast.makeText(getActivity(), "Сlick on the card" , Toast.LENGTH_SHORT).show();
             }
         });
-
         return view;
     }
 
@@ -59,4 +59,5 @@ public class BaseFragment extends Fragment implements DataHelper.ResultListener{
         adapter = new RecyclerAdapter(result);
         recyclerView.setAdapter(adapter);
     }
+
 }

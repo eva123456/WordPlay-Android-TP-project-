@@ -78,7 +78,7 @@ public class DataService extends IntentService {
 
     private void handleSetInfoAction(String setName, final int rId) {
         boolean success = true;
-        WordSet result = new WordSet();
+        WordSet result;
         try{
             result = DataMethod.getInstance().getSetInfo(setName);
         } catch (Exception e){

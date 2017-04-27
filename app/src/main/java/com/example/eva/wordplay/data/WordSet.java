@@ -50,7 +50,7 @@ public class WordSet implements Serializable{
         final String TAG = "WPLogs";
         Log.d(TAG, " SET : NAME = " + name);
         for(String word : words.keySet()){
-            Log.d(TAG, " WROD : " + word + ", TRANSLATION : " + words.get(word));
+            Log.d(TAG, " WORD : " + word + ", TRANSLATION : " + words.get(word));
         }
     }
 
