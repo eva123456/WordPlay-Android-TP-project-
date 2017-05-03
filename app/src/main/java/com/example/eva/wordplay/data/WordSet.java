@@ -40,14 +40,24 @@ public class WordSet implements Serializable{
         correctWords.add(word);
     }
 
-    public int getPercent(){
-        int all = words.size();
-        int correct = correctWords.size();
-        return (all == 0) ? 0 : 100*(correct/all);
+    public ArrayList<String> getCorrectWords(){
+        return correctWords;
     }
 
-    public void mixWords(){
+    public int getPercent(){
+        double all = words.size();
+        double correct = correctWords.size();
+        return (all == 0) ? 0 : (int) (100 * correct/all);
+    }
 
+    public HashMap<String, String> getWordsForCheck(){
+        HashMap<String, String> result = new HashMap<>();
+        for(String key : words.keySet()){
+            if(!correctWords.contains(key)){
+                result.put(key, words.get(key));
+            }
+        }
+        return result;
     }
 
     public void show(){

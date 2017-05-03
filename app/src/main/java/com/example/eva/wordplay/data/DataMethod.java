@@ -31,6 +31,11 @@ public class DataMethod {
                 + " (setName, word, translation, isCorrect) VALUES( " + values + " )");
     }
 
+    public void makeWordCorrect(final String setName, final String word){
+        database.execSQL("UPDATE " + WORD_TABLE + " SET isCorrect = 1 WHERE word = '"
+                + word + "' AND setName = '" + setName + "';");
+    }
+
     public WordSet getSetInfo(final String name) {
 
         Cursor cursor = database.rawQuery("SELECT * FROM Words WHERE setName = '" + name + "';", null);

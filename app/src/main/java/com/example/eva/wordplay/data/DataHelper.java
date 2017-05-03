@@ -115,9 +115,27 @@ public class DataHelper {
                         final WordSet result = (WordSet) intent.getSerializableExtra(DataService.EXTRA_SET_INFO_RESULT);
                         listener.onSetResult(success, result);
                     }
+
+                    if(intent.getStringExtra(DataService.EXTRA_RESULT_TYPE)
+                            .equals(DataService.EXTRA_UPDATE_WORD_RESULT)){
+                        final boolean success = intent.getAction().equals(DataService.ACTION_SUCCESS);
+                        final String res = success ? "OK" : "FAIL";
+                        listener.onStringResult(success, res);
+                    }
                 }
             }
         }, filter);
+    }
+
+    public int updateWord(Context context, String setName, String word, final ResultListener listener){
+        mListeners.put(mIdCounter, listener);
+        Intent intent = new Intent(context, DataService.class);
+        intent.setAction(DataService.ACTION_UPDATE_WORD);
+        intent.putExtra(DataService.EXTRA_SET_NAME, setName);
+        intent.putExtra(DataService.EXTRA_WORD, word);
+        intent.putExtra(DataService.EXTRA_REQUEST_ID, mIdCounter);
+        context.startService(intent);
+        return mIdCounter++;
     }
 
     public int add(Context context, WordSet newSet, final ResultListener listener){

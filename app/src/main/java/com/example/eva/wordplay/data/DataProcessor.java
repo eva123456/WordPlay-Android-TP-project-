@@ -24,5 +24,8 @@ public class DataProcessor {
         return DataMethod.getInstance().getLastSavedSets();
     }
 
+    public static void makeWordCorrect(String setName, String word) {
+        DataMethod.getInstance().makeWordCorrect(setName, word);
+    }
 }
 

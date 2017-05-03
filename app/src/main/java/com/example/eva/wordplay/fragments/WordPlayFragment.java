@@ -11,19 +11,22 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.eva.wordplay.R;
+import com.example.eva.wordplay.data.DataHelper;
 import com.example.eva.wordplay.data.WordSet;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class WordPlayFragment extends Fragment implements View.OnClickListener{
+public class WordPlayFragment extends Fragment implements View.OnClickListener, DataHelper.ResultListener{
 
     View view;
     TextView wordView, hintView;
     CardView hintCard;
     private WordSet currentDeck;
-    private ArrayDeque<String> words = new ArrayDeque<>();
+    private ArrayDeque<String> incorrectWords = new ArrayDeque<>();
+    private ArrayList<String> newCorrectWords = new ArrayList<>();
     private DeckListener listener;
 
 
@@ -61,24 +64,27 @@ public class WordPlayFragment extends Fragment implements View.OnClickListener{
 
     public void setDeck(WordSet currentDeck){
         this.currentDeck = currentDeck;
-        HashMap<String, String> wordPack = currentDeck.getWords();//TODO exclude correct words
-        for(String key : wordPack.keySet()){
-            words.add(key);
+        HashMap<String, String> correctWordPack = currentDeck.getWordsForCheck();
+        for(String key : correctWordPack.keySet()){
+            incorrectWords.add(key);
         }
     }
 
     public void goNext(){
-        if(words.isEmpty()){
+        if(incorrectWords.isEmpty()){
+            for(String word : newCorrectWords){
+                DataHelper.getInstance(getActivity()).updateWord(getActivity(), currentDeck.getName(), word, this);
+            }
             listener.onCheckFinish();
         }
-        String word = words.poll();
+        String word = incorrectWords.poll();
         wordView.setText(word);
     }
 
     private void markWordAsCorrect(){
         String word = (String) wordView.getText();
         currentDeck.markWordCorrect(word);
-        //TODO db update
+        newCorrectWords.add(word);
     }
 
     private void getHelp(){
@@ -103,5 +109,20 @@ public class WordPlayFragment extends Fragment implements View.OnClickListener{
                 getHelp();
                 break;
         }
+    }
+
+    @Override
+    public void onStringResult(boolean success, String result) {
+        Log.d("WPLogs", " word updated in db with status : " + result);
+    }
+
+    @Override
+    public void onSetResult(boolean success, WordSet result) {
+
+    }
+
+    @Override
+    public void onArraySetResult(boolean success, ArrayList<WordSet> result) {
+
     }
 }

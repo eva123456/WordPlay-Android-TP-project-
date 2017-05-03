@@ -68,7 +68,9 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
             checkExistingFragment();
         }
 
-        basePage.registerWPCallback(this);
+        if(basePage != null){
+            basePage.registerWPCallback(this);
+        }
     }
 
     private void checkExistingFragment(){
@@ -105,6 +107,9 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
     }
 
     private void setPage(Fragment fragment){
+        if(fragment.isAdded()){
+            return;
+        }
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fTransaction = fragmentManager.beginTransaction();
         fTransaction.add(fragmentContainer, fragment, fragment.getTag());
@@ -149,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
         if(basePage == null){
             basePage = new BaseFragment();
         }
+        basePage.registerWPCallback(this);
         setPage(basePage);
     }
 
@@ -170,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
                 switch(position){
                     case 0:
                         basePage = basePage == null ? new BaseFragment() : basePage;
+                        basePage.registerWPCallback(MainActivity.this);
                         setPage(basePage);
                         break;
                     case 1:
