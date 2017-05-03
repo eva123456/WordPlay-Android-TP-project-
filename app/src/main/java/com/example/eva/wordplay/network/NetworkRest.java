@@ -2,7 +2,6 @@ package com.example.eva.wordplay.network;
 
 import android.util.Log;
 
-import com.example.eva.wordplay.R;
 import com.example.eva.wordplay.data.Word;
 import com.example.eva.wordplay.data.WordSet;
 import com.google.gson.Gson;

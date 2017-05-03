@@ -13,19 +13,18 @@ import android.support.v4.app.FragmentTransaction;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.example.eva.wordplay.data.WordSet;
 import com.example.eva.wordplay.fragments.AboutFragment;
 import com.example.eva.wordplay.fragments.BaseFragment;
 import com.example.eva.wordplay.fragments.CreationFragment;
 import com.example.eva.wordplay.fragments.ImportFragment;
 import com.example.eva.wordplay.fragments.WordPlayFragment;
-import com.example.eva.wordplay.network.NetworkHelper;
-
-import java.security.spec.ECField;
 
 import static java.lang.String.valueOf;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements BaseFragment.CheckBeginListener, WordPlayFragment.DeckListener{
 
     private final String TAG = MainActivity.class.getSimpleName();
 
@@ -39,6 +38,7 @@ public class MainActivity extends AppCompatActivity{
     private BaseFragment basePage;
     private ImportFragment importPage;
     private AboutFragment aboutPage;
+    private WordPlayFragment checkPage;
 
     private static int currentFragmentIndex;
 
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity{
 
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment currentFragment =fragmentManager.findFragmentById(R.id.content);
+        Fragment currentFragment = fragmentManager.findFragmentById(R.id.content);
 
         if(currentFragment==null) {
             basePage = new BaseFragment();
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity{
             checkExistingFragment();
         }
 
-
+        basePage.registerWPCallback(this);
     }
 
     private void checkExistingFragment(){
@@ -124,6 +124,34 @@ public class MainActivity extends AppCompatActivity{
         return super.onPrepareOptionsMenu(menu);
     }
 
+    @Override
+    public void onStartDeckCheck(WordSet set) {
+        // FIXME: 03.05.17
+        if(basePage != null){
+            clearContainer(basePage);
+            basePage = null;
+        }
+        checkPage = new WordPlayFragment();
+        checkPage.registerDeckListener(this);
+        checkPage.setDeck(set);
+        setPage(checkPage);
+    }
+
+    @Override
+    public void onCheckStart() {
+        checkPage.goNext();
+    }
+
+    @Override
+    public void onCheckFinish() {
+        Toast.makeText(this, " You finished this deck!", Toast.LENGTH_LONG).show();
+        clearContainer(checkPage);
+        if(basePage == null){
+            basePage = new BaseFragment();
+        }
+        setPage(basePage);
+    }
+
     public class NavigationDrawerListener implements AdapterView.OnItemClickListener {
         private final String TAG = NavigationDrawerListener.class.getSimpleName();
         @Override
@@ -166,7 +194,4 @@ public class MainActivity extends AppCompatActivity{
 
         }
     }
-
-
-
 }

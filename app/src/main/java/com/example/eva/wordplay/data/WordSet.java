@@ -28,6 +28,10 @@ public class WordSet implements Serializable{
         return name;
     }
 
+    public String getTranslation(String key){
+        return words.get(key);
+    }
+
     public boolean isCorrect(String word){
         return correctWords.indexOf(word) != -1;
     }
