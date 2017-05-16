@@ -19,6 +19,7 @@ public class DataService extends IntentService {
     public final static String ACTION_GET_SET_INFO = "action.GET_SET_INFO";
     public final static String ACTION_GET_ALL_SETS = "action.GET_ALL_SETS";
     public final static String ACTION_UPDATE_WORD = "action.UPDATE_WORD";
+    public final static String ACTION_GET_ALL_WORDS = "action.GET_ALL_WORDS";
 
     public final static String EXTRA_SET_OBJECT = "extra.SET_OBJECT";
     public final static String EXTRA_SET_NAME = "extra.SET_NAME";
@@ -28,6 +29,8 @@ public class DataService extends IntentService {
     public final static String EXTRA_ALL_SETS_RESULT = "extra.ALL_SETS_RESULT";
     public final static String EXTRA_INSERT_RESULT = "extra.INSERT_RESULT";
     public final static String EXTRA_UPDATE_WORD_RESULT = "extra.UPDATE_WORD_RESULT";
+
+    public final static String EXTRA_ALL_WORDS_RESULT = "extra.ALL_WORDS_RESULT";
 
     public final static String ACTION_SUCCESS = "action.SUCCESS";
     public final static String ACTION_FAIL = "action.FAIL";
@@ -64,6 +67,11 @@ public class DataService extends IntentService {
                 final int requestId = intent.getIntExtra(EXTRA_REQUEST_ID, -1);
                 handleUpdateWordAction(setName, word, requestId);
             }
+
+            if(ACTION_GET_ALL_WORDS.equals(action)){
+                final int requestId = intent.getIntExtra(EXTRA_REQUEST_ID, -1);
+                handleGetAllWordAction(requestId);
+            }
         }
     }
 
@@ -80,6 +88,29 @@ public class DataService extends IntentService {
         intent.putExtra(EXTRA_RESULT_TYPE, EXTRA_UPDATE_WORD_RESULT);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
+
+    private void handleGetAllWordAction(final int rId){
+        boolean success = true;
+        ArrayList<Word> result;
+        try{
+            result = DataMethod.getInstance().getAllWords();
+        } catch (Exception e){
+            success = false;
+            result = null;
+        }
+
+        Intent intent = new Intent(success ? ACTION_SUCCESS : ACTION_FAIL);
+
+        intent.putExtra(EXTRA_REQUEST_ID, rId);
+        if(result != null){
+            intent.putExtra(EXTRA_ALL_WORDS_RESULT, result);
+        }
+        intent.putExtra(EXTRA_RESULT_TYPE, EXTRA_ALL_WORDS_RESULT);
+
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+
+    }
+
 
     private void handleAllSetsAction(final int rId) {
         boolean success = true;

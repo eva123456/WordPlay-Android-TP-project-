@@ -36,6 +36,29 @@ public class DataMethod {
                 + word + "' AND setName = '" + setName + "';");
     }
 
+    public ArrayList<Word> getAllWords(){
+        Cursor cursor = database.rawQuery("Select * FROM Words;", null);
+        if(cursor == null) {
+            return null;
+        }
+
+        ArrayList<Word> tmp = new ArrayList<>();
+        Log.d("WPLogs","Let's see all words");
+        try {
+            while (cursor.moveToNext()) {
+                Log.d("WPLogs", "Some word was " + cursor.getString(cursor.getColumnIndex("word")));
+                String word = cursor.getString(cursor.getColumnIndex("word"));
+                String translation = cursor.getString(cursor.getColumnIndex("translation"));
+                tmp.add(new Word(word, translation));
+            }
+        } finally {
+            cursor.close();
+        }
+        return tmp;
+
+
+    }
+
     public WordSet getSetInfo(final String name) {
 
         Cursor cursor = database.rawQuery("SELECT * FROM Words WHERE setName = '" + name + "';", null);
@@ -86,5 +109,7 @@ public class DataMethod {
         database.execSQL("DELETE FROM " + SET_TABLE
                 + " WHERE name = '" + name + "';");
     }
+
+
 
 }

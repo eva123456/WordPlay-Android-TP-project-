@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.eva.wordplay.R;
 import com.example.eva.wordplay.data.DataHelper;
+import com.example.eva.wordplay.data.Word;
 import com.example.eva.wordplay.data.WordSet;
 
 import java.util.ArrayDeque;
@@ -125,4 +126,7 @@ public class WordPlayFragment extends Fragment implements View.OnClickListener, 
     public void onArraySetResult(boolean success, ArrayList<WordSet> result) {
 
     }
+
+    @Override
+    public void onWordArrayResult(boolean success, ArrayList<Word> result) {}
 }

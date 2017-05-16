@@ -27,5 +27,9 @@ public class DataProcessor {
     public static void makeWordCorrect(String setName, String word) {
         DataMethod.getInstance().makeWordCorrect(setName, word);
     }
+
+    public static ArrayList<Word> getAllWords(){
+        return DataMethod.getInstance().getAllWords();
+    }
 }
 

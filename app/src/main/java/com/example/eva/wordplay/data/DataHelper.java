@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.example.eva.wordplay.network.NetworkHelper;
+
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
@@ -110,6 +112,14 @@ public class DataHelper {
                     }
 
                     if(intent.getStringExtra(DataService.EXTRA_RESULT_TYPE)
+                            .equals(DataService.EXTRA_ALL_WORDS_RESULT)){
+                        final boolean success = intent.getAction().equals(DataService.ACTION_SUCCESS);
+                        final ArrayList<Word> result = (ArrayList<Word>)
+                                intent.getSerializableExtra(DataService.EXTRA_ALL_WORDS_RESULT);
+                        listener.onWordArrayResult(success, result);
+                    }
+
+                    if(intent.getStringExtra(DataService.EXTRA_RESULT_TYPE)
                             .equals(DataService.EXTRA_SET_INFO_RESULT)){
                         final boolean success = intent.getAction().equals(DataService.ACTION_SUCCESS);
                         final WordSet result = (WordSet) intent.getSerializableExtra(DataService.EXTRA_SET_INFO_RESULT);
@@ -125,6 +135,12 @@ public class DataHelper {
                 }
             }
         }, filter);
+    }
+
+    public int addWord(Context context, Word word, final ResultListener listener){
+        mListeners.put(mIdCounter, listener);
+
+        return mIdCounter++;
     }
 
     public int updateWord(Context context, String setName, String word, final ResultListener listener){
@@ -167,10 +183,20 @@ public class DataHelper {
         return mIdCounter++;
     }
 
+    public int getAllWords(Context context, final ResultListener listener){
+        mListeners.put(mIdCounter, listener);
+        Intent intent = new Intent(context, DataService.class);
+        intent.setAction(DataService.ACTION_GET_ALL_WORDS);
+        intent.putExtra(DataService.EXTRA_REQUEST_ID, mIdCounter);
+        context.startService(intent);
+        return mIdCounter++;
+    }
+
     public interface ResultListener {
         void onStringResult(final boolean success, final String result);
         void onSetResult(final boolean success, final WordSet result);
         void onArraySetResult(final boolean success, final ArrayList<WordSet> result);
+        void onWordArrayResult(final boolean success, final ArrayList<Word> result);
     }
     
 }

@@ -70,6 +70,9 @@ public class BaseFragment extends Fragment implements DataHelper.ResultListener{
     }
 
     @Override
+    public void onWordArrayResult(boolean success, ArrayList<Word> result) {}
+
+    @Override
     public void onArraySetResult(boolean success, ArrayList<WordSet> result) {
         adapter = new RecyclerAdapter(result);
         recyclerView.setAdapter(adapter);
