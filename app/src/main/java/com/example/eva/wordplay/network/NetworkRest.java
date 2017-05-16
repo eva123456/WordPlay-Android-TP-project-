@@ -22,6 +22,7 @@ class NetworkRest {
 
     private final static String BACK_URL = "https://glacial-everglades-25374.herokuapp.com/";
 
+    private final Gson gson = new Gson();
 
     NetworkRest() {
     }
@@ -33,7 +34,6 @@ class NetworkRest {
         final String result = response.body().string();
         Log.d(TAG, result);
         final ArrayList<WordSet> serverSets;
-        Gson gson = new Gson();
         serverSets = gson.fromJson(result,new TypeToken<List<WordSet>>(){}.getType());
         for(WordSet set : serverSets) {
             Log.d(TAG, set.getName());
@@ -46,7 +46,6 @@ class NetworkRest {
         Response response = this.httpClient.newCall(request).execute();
         final String result = response.body().string();
         Log.d(TAG, result);
-        Gson gson = new Gson();
         ArrayList<Word> words = gson.fromJson(result,new TypeToken<List<Word>>(){}.getType());
         for(Word word : words) {
             Log.d(TAG, word.getWord());
