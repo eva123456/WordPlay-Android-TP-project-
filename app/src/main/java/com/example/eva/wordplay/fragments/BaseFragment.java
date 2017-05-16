@@ -31,7 +31,7 @@ public class BaseFragment extends Fragment implements DataHelper.ResultListener{
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.base_fragment, null);
 
-        int requestId = DataHelper.getInstance(getActivity()).getLastSavedSets(getActivity(), this);
+        DataHelper.getInstance(getActivity()).getLastSavedSets(getActivity(), this);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);

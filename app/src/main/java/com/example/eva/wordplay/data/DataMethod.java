@@ -10,6 +10,7 @@ public class DataMethod {
 
     private static final String SET_TABLE = "Sets";
     private static final String WORD_TABLE = "Words";
+    private static final String WORDS_TO_SETS_TABLE = "WordsToSets";
 
     private SQLiteDatabase database = DataHelper.getWritableDataBase();
     private static DataMethod instance = new DataMethod();
@@ -25,15 +26,15 @@ public class DataMethod {
                 + "(name) VALUES('" + name + "')");
     }
 
-    public void insertWord(final String setName, final String word, final String translation, final boolean correct){
-        String values = "'" + setName + "','" + word + "','" + translation + "'," + Integer.toString(correct ? 1 : 0);
+    public void insertWord(final String word, final String translation, final boolean correct){
+        String values = "'" + word + "','" + translation + "'," + Integer.toString(correct ? 1 : 0);
         database.execSQL("INSERT INTO " + WORD_TABLE
-                + " (setName, word, translation, isCorrect) VALUES( " + values + " )");
+                + " (word, translation, isCorrect) VALUES( " + values + " )");
     }
 
     public void makeWordCorrect(final String setName, final String word){
-        database.execSQL("UPDATE " + WORD_TABLE + " SET isCorrect = 1 WHERE word = '"
-                + word + "' AND setName = '" + setName + "';");
+        database.execSQL("UPDATE " + WORDS_TO_SETS_TABLE + " SET isCorrect = 1 WHERE word = '"
+                + word + "' AND setName = '"+setName+"';");
     }
 
     public ArrayList<Word> getAllWords(){
@@ -60,8 +61,8 @@ public class DataMethod {
     }
 
     public WordSet getSetInfo(final String name) {
-
-        Cursor cursor = database.rawQuery("SELECT * FROM Words WHERE setName = '" + name + "';", null);
+        Cursor cursor = database.rawQuery("SELECT * FROM  WordsToSets WTS LEFT OUTER JOIN Words W" +
+                " ON WTS.wordId = W.id WHERE WTS.setName = '" + name + "';", null);
         if(cursor == null){
             return null;
         }

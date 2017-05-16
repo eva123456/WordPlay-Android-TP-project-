@@ -4,13 +4,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Looper;
+import android.support.annotation.IntegerRes;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 
 import com.example.eva.wordplay.network.NetworkHelper;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
@@ -24,17 +29,18 @@ public class DataHelper {
     private static DataHelper instance = new DataHelper();
     private static SQLiteDatabase database;
 
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
     private static final String DB_NAME = "WordPlay.db";
     private static final String SET_TABLE = "Sets";
     private static final String WORD_TABLE = "Words";
+    private static final String WORDS_TO_SETS_TABLE = "WordsToSets";
 
     Context context;
 
     private DataHelper() {
     }
 
-    public synchronized static DataHelper getInstance(final Context context) {
+    public synchronized static DataHelper getInstance(final Context context){
         if (Thread.currentThread() != Looper.getMainLooper().getThread()) {
             throw new IllegalStateException();
         }
@@ -49,10 +55,62 @@ public class DataHelper {
 
                 @Override
                 public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+                    Log.d("WPLogs","Try to begin update " + oldVersion + " " + newVersion);
+                    if(oldVersion==1&&newVersion==2){
+                        migrateForm1To2(db);
+                    }
                 }
             };
 
             instance.database = dbHelper.getWritableDatabase();
+
+            /*database.execSQL("DELETE FROM " + WORD_TABLE
+                    +" WHERE word='word 5';");
+            String values = "'word 5', 'слово 5', 0";
+            database.execSQL("INSERT INTO " + WORD_TABLE
+                    + " (word, translation, isCorrect) VALUES( " + values + " )");*/
+            //Внешние ключи не работают в принципе, пам-пам
+            //пока их не включишь, разумеется.
+
+            /*database.execSQL("INSERT INTO " + SET_TABLE
+                    + "(name) VALUES('deck2')");*/
+
+            Log.d("WPLogs","--------Table content-------------");
+            Log.d("WPLogs", "Sets");
+            Cursor cursor = database.rawQuery("SELECT * FROM Sets;", null);
+            try {
+                while (cursor.moveToNext()) {
+                    String name;
+                    //String setName;
+                    name = cursor.getString(cursor.getColumnIndex("name"));
+                    //setName = cursor.getString(cursor.getColumnIndex("setName"));*/
+                    //for(String tmp:cursor.getColumnNames())
+                    Log.d("WPLogs",name);
+                }
+            } finally {
+                cursor.close();
+            }
+
+            Log.d("WPLogs", "Words");
+
+            cursor = database.rawQuery("SELECT * FROM Words;", null);
+            try {
+                while (cursor.moveToNext()) {
+                    String word;
+                    String translation;
+                    word = cursor.getString(cursor.getColumnIndex("word"));
+                    translation = cursor.getString(cursor.getColumnIndex("translation"));
+                    if(word!=null) {
+                        Log.d("WPLogs", word + " "+ translation);
+                    } else {
+                        Log.d("WPLogs", "Word was null, WTF");
+                    }
+                }
+            } finally {
+                cursor.close();
+            }
+
+            Log.d("WPLogs", "Now database version is " + database.getVersion());
         }
         instance.initBroadcastReceiver(context);
         return instance;
@@ -65,6 +123,7 @@ public class DataHelper {
     private void createDB(SQLiteDatabase db){
         createSetTable(db);
         createWordTable(db);
+        createWordsTOSetsTable(db);
     }
 
     private void createSetTable(SQLiteDatabase db){
@@ -76,12 +135,99 @@ public class DataHelper {
     private void createWordTable(SQLiteDatabase db){
         db.execSQL("CREATE TABLE " + WORD_TABLE + "("
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + "setName text,"
                 + "word text,"
-                + "translation text,"
-                + "isCorrect integer,"
-                + "FOREIGN KEY(setName) REFERENCES " + SET_TABLE + "(name)"
+                + "translation text"
                 + ");");
+    }
+
+    private void createWordsTOSetsTable(SQLiteDatabase db){
+        db.execSQL("CREATE TABLE " + WORDS_TO_SETS_TABLE + "("
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "setName text, "
+                + "wordId integer, "
+                + "word text"
+                + "isCorrect integer" + ");");
+    }
+
+    private static void migrateForm1To2(SQLiteDatabase db){
+        db.beginTransaction();
+        try{
+            // казалось бы, мы все удалили, но нет, транзакция не отмечена как успешная
+            //db.execSQL("ALTER TABLE " + WORD_TABLE + " ");
+            db.setForeignKeyConstraintsEnabled(false);
+            db.execSQL("CREATE TABLE " + WORDS_TO_SETS_TABLE + " ("
+                    + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + "setName text, "
+                    + "word text, "
+                    + "wordId integer, "
+                    + "isCorrect integer" + ");");
+            Log.d("WPLogs","Новая таблица создана, но мы не спешим коммитить транзакцию.");
+            Log.d("WPLogs","Заполняем новую таблицу");
+            Cursor cursor = db.rawQuery("SELECT * FROM " + WORD_TABLE+";", null);
+            try {
+                while (cursor.moveToNext()) {
+                    String setName;
+                    Integer id;
+                    Integer isCorrect;
+                    String word;
+                    setName = cursor.getString(cursor.getColumnIndex("setName"));
+                    id = cursor.getInt(cursor.getColumnIndex("id"));
+                    isCorrect = cursor.getInt(cursor.getColumnIndex("isCorrect"));
+                    word = cursor.getString(cursor.getColumnIndex("word"));
+                    if(setName!=null) {
+                        Log.d("WPLogs", setName + " " + word);
+                        String values = "'"+setName+"', '"+word +"', " + id +", "+ isCorrect;
+                        db.execSQL("INSERT INTO " + WORDS_TO_SETS_TABLE + " (setName, word, wordId, isCorrect)"
+                                + "VALUES (" + values + ");");
+                    }
+                }
+            } finally {
+                cursor.close();
+            }
+            Log.d("WPLogs","Таблица заполнилась. Теперь меняем таблицу со словами");
+
+            db.execSQL("CREATE temporary TABLE tmp ("
+                    + "id INTEGER,"
+                    + "word text,"
+                    + "translation text"
+                    + ");");
+            db.execSQL("INSERT INTO tmp SELECT id, word, translation FROM "
+                    + WORD_TABLE + ";");
+
+            db.execSQL("DROP TABLE " + WORD_TABLE + ";");
+            db.execSQL("CREATE TABLE Words ("
+                    + "id integer primary key autoincrement,"
+                    + "word text,"
+                    + "translation text"
+                    + ");");
+            Log.d("WPLogs","Изменили таблицу со словами. Проверяем, что она изменилась");
+            //db.execSQL("INSERT INTO Words (id, word, translation) "
+            //        + "SELECT id, word, translation FROM tmp"); - не работает
+            //почему - хер его знает. Если мне кто объяснит буду благодарен
+            cursor = db.rawQuery("SELECT * FROM tmp;", null);
+            try {
+                while (cursor.moveToNext()) {
+                    Integer id;
+                    Integer isCorrect;
+                    String word;
+                    String translation;
+                    word = cursor.getString(cursor.getColumnIndex("word"));
+                    translation = cursor.getString(cursor.getColumnIndex("translation"));
+                    id = cursor.getInt(cursor.getColumnIndex("id"));
+                    Log.d("WPLogs", id + " " + word + " " + translation);
+                    db.execSQL("INSERT INTO Words (id, word, translation) VALUES ("
+                            + id+", '"+word+"','"+ translation+"');");
+                }
+            } finally {
+                cursor.close();
+            }
+            db.execSQL("DROP TABLE tmp;");
+            db.setTransactionSuccessful();
+            //А внешних ключей у нас не будет. Они и так не работали раньше
+        } finally {
+            Log.d("WPLogs","Миграция успешно примененаю");
+            db.endTransaction();
+        }
     }
 
     private void initBroadcastReceiver(Context context) {

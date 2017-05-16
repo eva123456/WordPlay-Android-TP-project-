@@ -11,7 +11,7 @@ public class DataProcessor {
         DataMethod.getInstance().insertSet(setName);
         HashMap<String, String> setWords = newSet.getWords();
         for(String word : setWords.keySet()){
-            DataMethod.getInstance().insertWord(setName, word, setWords.get(word), newSet.isCorrect(word));
+            DataMethod.getInstance().insertWord(word, setWords.get(word), newSet.isCorrect(word));
         }
     }
 
