@@ -12,16 +12,15 @@ import android.widget.TextView;
 
 import com.example.eva.wordplay.R;
 import com.example.eva.wordplay.data.Word;
-import com.example.eva.wordplay.data.WordSet;
 
 import java.util.ArrayList;
 
 
 public class WordRecyclerAdapter extends RecyclerView.Adapter<WordRecyclerAdapter.ViewHolder> {
 
-    private ArrayList<CreationFragment.PickableWord> words;
+    private ArrayList<Word> words;
 
-    public WordRecyclerAdapter(ArrayList<CreationFragment.PickableWord> words){
+    public WordRecyclerAdapter(ArrayList<Word> words){
         this.words = words;
     }
 
@@ -36,14 +35,15 @@ public class WordRecyclerAdapter extends RecyclerView.Adapter<WordRecyclerAdapte
             word = (TextView) itemView.findViewById(R.id.word);
             translation = (TextView) itemView.findViewById(R.id.translation);
             layout = (LinearLayout)itemView.findViewById(R.id.word_layout);
+            //unpickWord();
         }
 
         public void pickWord(){
-            layout.setBackgroundColor(Color.parseColor("#ffffff"));
+            layout.setBackgroundColor(Color.parseColor("#FFFF88"));
         }
 
         public void unpickWord(){
-            layout.setBackgroundColor(Color.parseColor("#FFFF88"));
+            layout.setBackgroundColor(Color.parseColor("#ffffff"));
         }
     }
 

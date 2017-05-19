@@ -30,6 +30,7 @@ public class DataMethod {
         String values = "'" + word + "','" + translation + "'," + Integer.toString(correct ? 1 : 0);
         database.execSQL("INSERT INTO " + WORD_TABLE
                 + " (word, translation, isCorrect) VALUES( " + values + " )");
+        //TODO сделать два метода - один про создание нового слова, второй - для добавления свзяи
     }
 
     public void makeWordCorrect(final String setName, final String word){

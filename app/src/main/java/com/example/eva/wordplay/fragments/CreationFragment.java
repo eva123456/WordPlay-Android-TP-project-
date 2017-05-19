@@ -19,6 +19,7 @@ import com.example.eva.wordplay.data.Word;
 import com.example.eva.wordplay.data.WordSet;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.logging.Logger;
 
 public class CreationFragment extends Fragment implements View.OnClickListener, DataHelper.ResultListener{
@@ -32,24 +33,8 @@ public class CreationFragment extends Fragment implements View.OnClickListener, 
 
     private EditText deckNameView;
 
-    private ArrayList<PickableWord> allWords = new ArrayList<>();
-
-    class PickableWord{
-        private Word word;
-        private Boolean isPicked = false;
-
-        private PickableWord(Word word){
-            this.word = word;
-        }
-
-        public String getWord(){
-            return word.getWord();
-        }
-
-        public String getTranslation(){
-            return word.getTranslation();
-        }
-    }
+    private ArrayList<Word> allWords = new ArrayList<>();
+    private ArrayList<Boolean> isPicked = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,36 +48,17 @@ public class CreationFragment extends Fragment implements View.OnClickListener, 
         DataHelper.getInstance(getActivity()).getAllWords(getActivity(), this);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-
-        allWords.add(new PickableWord(new Word("Word","Слово")));
-        allWords.add(new PickableWord(new Word("Word 1","Слово 1")));
-        allWords.add(new PickableWord(new Word("Word 2","Слово 2")));
-        allWords.add(new PickableWord(new Word("Word 3","Слово 3")));
-        allWords.add(new PickableWord(new Word("Word 4","Слово 4")));
-        allWords.add(new PickableWord(new Word("Word 5","Слово 5")));
-        allWords.add(new PickableWord(new Word("Word 6","Слово 6")));
-        adapter = new WordRecyclerAdapter(allWords);
-        recyclerView.setAdapter(adapter);
-
-        recyclerView.addOnItemTouchListener(new RecyclerClickListener(getActivity()) {
-            @Override
-            public void onItemClick(RecyclerView recyclerView, View view, int position) {
-                prepareDeck(recyclerView, view, position);
-            }
-        });
         return view;
 
     }
 
     private void prepareDeck(RecyclerView recyclerView, View view, int position) {
         WordRecyclerAdapter.ViewHolder viewHolder = (WordRecyclerAdapter.ViewHolder) recyclerView.getChildViewHolder(view);
-        if(!allWords.get(position).isPicked) {
-            allWords.get(position).isPicked = true;
+        if(!isPicked.get(position)) {
+            isPicked.set(position, true);
             viewHolder.pickWord();
         } else {
-            allWords.get(position).isPicked = false;
+            isPicked.set(position, false);
             viewHolder.unpickWord();
         }
     }
@@ -101,12 +67,13 @@ public class CreationFragment extends Fragment implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.createDeck:
-                if(deckNameView.getText().toString()!=null){
+                if(!deckNameView.getText().toString().equals("")){
                     Toast.makeText(getContext(),"You try to save deck with name " +
                             deckNameView.getText().toString(),Toast.LENGTH_SHORT).show();
+
                 } else {
                     Toast.makeText(getContext(),"You try to save without name",Toast.LENGTH_SHORT).show();
-                }
+                } //TODO сохранить созданный список в базу
                 //wordSet.setName(nameView.getText().toString());
                 //int mRequestId = DataHelper.getInstance(getActivity()).add(getActivity(),wordSet, this);
                 break;
@@ -116,8 +83,21 @@ public class CreationFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onWordArrayResult(boolean success, ArrayList<Word> result) {
         Log.d("WPLogs", "Got all words " + result.size());
-        for(Word word :result){
-            Log.d("WPLogs",word.getWord() + " "+ word.getTranslation());
+        if(success){
+            allWords = result;
+            isPicked = new ArrayList<>(Collections.nCopies(result.size(), false));
+            adapter = new WordRecyclerAdapter(result);
+            recyclerView.setAdapter(adapter);
+            layoutManager = new LinearLayoutManager(getActivity());
+            recyclerView.setLayoutManager(layoutManager);
+
+            recyclerView.addOnItemTouchListener(new RecyclerClickListener(getActivity()) {
+                @Override
+                public void onItemClick(RecyclerView recyclerView, View view, int position) {
+                    prepareDeck(recyclerView, view, position);
+                }
+            });
+
         }
     }
 
