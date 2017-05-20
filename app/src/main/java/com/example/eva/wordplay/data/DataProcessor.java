@@ -9,12 +9,16 @@ import java.util.HashMap;
 
 public class DataProcessor {
 
+    public static void addNewWord(final Word word){
+        DataMethod.getInstance().addNewWord(word);
+    }
+
     public static void insertSet(final WordSet newSet){
         String setName = newSet.getName();
         DataMethod.getInstance().insertSet(setName);
         HashMap<String, String> setWords = newSet.getWords();
-        for(String word : setWords.keySet()){
-            DataMethod.getInstance().insertWord(word, setWords.get(word), newSet.isCorrect(word));
+        for(String word : setWords.keySet()){ 
+            DataMethod.getInstance().insertWord(word, setWords.get(word));
 
         }
     }

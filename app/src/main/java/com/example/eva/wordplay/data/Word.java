@@ -15,6 +15,11 @@ public class Word implements Serializable{
         this.translation = translation;
     }
 
+    public Word(String word, String translation){
+        this.word = word;
+        this.translation = translation;
+    }
+
     public Integer getId() {
         return id;
     }

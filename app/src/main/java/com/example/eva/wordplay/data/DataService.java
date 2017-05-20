@@ -22,12 +22,15 @@ public class DataService extends IntentService {
     public final static String ACTION_UPDATE_WORD = "action.UPDATE_WORD";
     public final static String ACTION_GET_ALL_WORDS = "action.GET_ALL_WORDS";
     public final static String ACTION_CREATE_NEW_SET = "action.CREATE_NEW_SET";
+    public final static String ACTION_ADD_WORD = "action.ADD_NEW_WORD";
 
     public final static String EXTRA_SET_OBJECT = "extra.SET_OBJECT";
     public final static String EXTRA_SET_NAME = "extra.SET_NAME";
     public final static String EXTRA_WORD = "extra.WORD";
     public final static String EXTRA_WORDS_LIST = "extra.WORDS_LIST";
+    public final static String EXTRA_WORD_OBJECT = "extra.WORD_OBJECT";
 
+    public final static String EXTRA_ADD_WORD_RESULT = "extra.ADD_WORD_RESULT";
     public final static String EXTRA_CREATE_SET_RESULT = "extra.CREATE_SET_RESULT";
     public final static String EXTRA_SET_INFO_RESULT = "extra.SET_INFO_RESULT";
     public final static String EXTRA_ALL_SETS_RESULT = "extra.ALL_SETS_RESULT";
@@ -84,7 +87,30 @@ public class DataService extends IntentService {
                 Log.d("WPLogs","Get intent about saving new set. Request id is "+requestId);
                 handleCreateNewSetAction(requestId, setName, words);
             }
+
+            if(ACTION_ADD_WORD.equals(action)){
+                final int requestId = intent.getIntExtra(EXTRA_REQUEST_ID, -1);
+                Log.d("WPLogs","Handle intent for new word creation with id = " + requestId);
+                final Word word = (Word)intent.getSerializableExtra(EXTRA_WORD_OBJECT);
+                handleAddWordAction(requestId, word);
+            }
         }
+    }
+
+    private void handleAddWordAction(final int rId, final Word word){
+        boolean success = true;
+        try{
+            DataProcessor.addNewWord(word);
+        } catch (Exception e){
+            Log.d("WPLogs","While trying to save word get exception.");
+            success = false;
+        }
+        Intent intent = new Intent(success ? ACTION_SUCCESS : ACTION_FAIL);
+        intent.putExtra(EXTRA_REQUEST_ID, rId);
+
+        intent.putExtra(EXTRA_RESULT_TYPE, EXTRA_ADD_WORD_RESULT);
+        Log.d("WPLogs","Sending response intent ");
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     private void handleCreateNewSetAction(final int rId, final String setName,

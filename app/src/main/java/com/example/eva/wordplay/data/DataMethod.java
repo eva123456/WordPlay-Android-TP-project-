@@ -22,7 +22,7 @@ public class DataMethod {
     }
 
     public void insertSet(final String name){
-        Cursor cursor = database.rawQuery("SELECT * FROM " + SET_TABLE + " WHERE name = '"
+        final Cursor cursor = database.rawQuery("SELECT * FROM " + SET_TABLE + " WHERE name = '"
                 + name + "';",  null);
         if(cursor.getCount()>0){
             cursor.close();
@@ -34,10 +34,25 @@ public class DataMethod {
                 + "(name) VALUES('" + name + "')");
     }
 
-    public void insertWord(final String word, final String translation, final boolean correct){
-        String values = "'" + word + "','" + translation + "'," + Integer.toString(correct ? 1 : 0);
+    public void addNewWord(final Word word){
+        Log.d("WPLogs","Try to add new word in DB");
+        final Cursor cursor = database.rawQuery("SELECT * FROM " + WORD_TABLE + " WHERE word = '"
+                + word.getWord() + "';",  null);
+        if(cursor.getCount()>0){
+            cursor.close();
+            throw new RuntimeException("This word already exists");
+        } else {
+            cursor.close();
+        }
+        final String values = "'" + word.getWord() + "','" + word.getTranslation() + "'";
         database.execSQL("INSERT INTO " + WORD_TABLE
-                + " (word, translation, isCorrect) VALUES( " + values + " )");
+                + " (word, translation) VALUES( " + values + " )");
+    }
+
+    public void insertWord(final String word, final String translation){
+        String values = "'" + word + "','" + translation + "'";
+        database.execSQL("INSERT INTO " + WORD_TABLE
+                + " (word, translation) VALUES( " + values + " )");
     }
 
     public void createWordInSet(final Word word, final String setName){

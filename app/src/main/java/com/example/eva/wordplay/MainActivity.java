@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
     private AboutFragment aboutPage;
     private WordPlayFragment checkPage;
     private AddWordFragment addWordFragment;
-    //TODO добавить фрагмент для добавления (ха-ха) слова
+    //TODO поменять порядок фрагментов
 
     private static int currentFragmentIndex;
 

@@ -238,6 +238,7 @@ public class DataHelper {
             public void onReceive(final Context context, final Intent intent) {
                 final int requestId = intent.getIntExtra(DataService.EXTRA_REQUEST_ID, -1);
                 final ResultListener listener = mListeners.remove(requestId);
+                Log.d("WPLogs","Get intent with request id = " + requestId);
                 if (listener != null) {
                     if(intent.getStringExtra(DataService.EXTRA_RESULT_TYPE)
                             .equals(DataService.EXTRA_INSERT_RESULT)){
@@ -282,6 +283,14 @@ public class DataHelper {
                         final String res = success ? "OK" : "FAIL";
                         listener.onStringResult(success, res);
                     }
+
+                    if(intent.getStringExtra(DataService.EXTRA_RESULT_TYPE)
+                            .equals(DataService.EXTRA_ADD_WORD_RESULT)){
+                        Log.d("WPLogs","Get response for add word action");
+                        final boolean success = intent.getAction().equals(DataService.ACTION_SUCCESS);
+                        final String res = success ? "OK" : "FAIL";
+                        listener.onStringResult(success, res);
+                    }
                 }
             }
         }, filter);
@@ -289,7 +298,12 @@ public class DataHelper {
 
     public int addWord(Context context, Word word, final ResultListener listener){
         mListeners.put(mIdCounter, listener);
-
+        Intent intent = new Intent(context, DataService.class);
+        intent.setAction(DataService.ACTION_ADD_WORD);
+        intent.putExtra(DataService.EXTRA_REQUEST_ID, mIdCounter);
+        intent.putExtra(DataService.EXTRA_WORD_OBJECT, word);
+        Log.d("WPLogs","Sending intent for new word creation");
+        context.startService(intent);
         return mIdCounter++;
     }
 
@@ -304,6 +318,7 @@ public class DataHelper {
         return mIdCounter++;
     }
 
+    //?? Возможно, теперь этот метод не нужен
     public int add(Context context, WordSet newSet, final ResultListener listener){
         mListeners.put(mIdCounter, listener);
         Intent intent = new Intent(context, DataService.class);
