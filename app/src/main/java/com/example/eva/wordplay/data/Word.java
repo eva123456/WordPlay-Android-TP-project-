@@ -1,13 +1,22 @@
 package com.example.eva.wordplay.data;
 
-public class Word {
+import java.io.Serializable;
+
+public class Word implements Serializable{
+    private Integer id;
+
     private String word;
 
     private String translation;
 
-    public Word(String word, String translation) {
+    public Word(String word, String translation, Integer id) {
+        this.id = id;
         this.word = word;
         this.translation = translation;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public String getWord() {

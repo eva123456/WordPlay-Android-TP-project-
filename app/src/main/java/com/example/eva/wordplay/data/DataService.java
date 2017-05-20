@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,11 +21,14 @@ public class DataService extends IntentService {
     public final static String ACTION_GET_ALL_SETS = "action.GET_ALL_SETS";
     public final static String ACTION_UPDATE_WORD = "action.UPDATE_WORD";
     public final static String ACTION_GET_ALL_WORDS = "action.GET_ALL_WORDS";
+    public final static String ACTION_CREATE_NEW_SET = "action.CREATE_NEW_SET";
 
     public final static String EXTRA_SET_OBJECT = "extra.SET_OBJECT";
     public final static String EXTRA_SET_NAME = "extra.SET_NAME";
     public final static String EXTRA_WORD = "extra.WORD";
+    public final static String EXTRA_WORDS_LIST = "extra.WORDS_LIST";
 
+    public final static String EXTRA_CREATE_SET_RESULT = "extra.CREATE_SET_RESULT";
     public final static String EXTRA_SET_INFO_RESULT = "extra.SET_INFO_RESULT";
     public final static String EXTRA_ALL_SETS_RESULT = "extra.ALL_SETS_RESULT";
     public final static String EXTRA_INSERT_RESULT = "extra.INSERT_RESULT";
@@ -72,7 +76,32 @@ public class DataService extends IntentService {
                 final int requestId = intent.getIntExtra(EXTRA_REQUEST_ID, -1);
                 handleGetAllWordAction(requestId);
             }
+
+            if(ACTION_CREATE_NEW_SET.equals(action)){
+                final int requestId = intent.getIntExtra(EXTRA_REQUEST_ID, -1);
+                final ArrayList<Word> words = (ArrayList<Word>) intent.getSerializableExtra(EXTRA_WORDS_LIST);
+                final String setName = intent.getStringExtra(EXTRA_SET_NAME);
+                Log.d("WPLogs","Get intent about saving new set. Request id is "+requestId);
+                handleCreateNewSetAction(requestId, setName, words);
+            }
         }
+    }
+
+    private void handleCreateNewSetAction(final int rId, final String setName,
+                                          final ArrayList<Word> words){
+        boolean success = true;
+        try{
+            DataProcessor.createNewSet(words,setName);
+        } catch (Exception e){
+            Log.d("WPLogs","While trying to save set get exception.");
+            success = false;
+        }
+        Intent intent = new Intent(success ? ACTION_SUCCESS : ACTION_FAIL);
+        intent.putExtra(EXTRA_REQUEST_ID, rId);
+
+        intent.putExtra(EXTRA_RESULT_TYPE, EXTRA_CREATE_SET_RESULT);
+        Log.d("WPLogs","Sending response intent ");
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     private void handleUpdateWordAction(String setName, String word, final int rId){
@@ -114,7 +143,7 @@ public class DataService extends IntentService {
 
     private void handleAllSetsAction(final int rId) {
         boolean success = true;
-        ArrayList<WordSet> result = new ArrayList<>();
+        ArrayList<WordSet> result;
         try{
             result = DataMethod.getInstance().getLastSavedSets();
         } catch (Exception e){

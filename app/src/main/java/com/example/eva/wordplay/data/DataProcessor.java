@@ -1,5 +1,8 @@
 package com.example.eva.wordplay.data;
 
+import android.provider.ContactsContract;
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -12,7 +15,18 @@ public class DataProcessor {
         HashMap<String, String> setWords = newSet.getWords();
         for(String word : setWords.keySet()){
             DataMethod.getInstance().insertWord(word, setWords.get(word), newSet.isCorrect(word));
+
         }
+    }
+
+    public static void createNewSet(final ArrayList<Word> words, final String setName){
+        DataMethod.getInstance().insertSet(setName);
+        Log.d("WPLogs","Set is successfully inserted.");
+        for(Word word: words){
+            Log.d("WPLogs","Inserting word "+word.getWord());
+            DataMethod.getInstance().createWordInSet(word, setName);
+        }
+        Log.d("WPLogs","All words are successfully inserted.");
     }
 
     public static WordSet getSetInformation(final String name){

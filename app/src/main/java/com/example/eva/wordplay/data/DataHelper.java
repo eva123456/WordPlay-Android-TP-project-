@@ -152,8 +152,6 @@ public class DataHelper {
     private static void migrateForm1To2(SQLiteDatabase db){
         db.beginTransaction();
         try{
-            // казалось бы, мы все удалили, но нет, транзакция не отмечена как успешная
-            //db.execSQL("ALTER TABLE " + WORD_TABLE + " ");
             db.setForeignKeyConstraintsEnabled(false);
             db.execSQL("CREATE TABLE " + WORDS_TO_SETS_TABLE + " ("
                     + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -203,7 +201,7 @@ public class DataHelper {
             Log.d("WPLogs","Изменили таблицу со словами. Проверяем, что она изменилась");
             //db.execSQL("INSERT INTO Words (id, word, translation) "
             //        + "SELECT id, word, translation FROM tmp"); - не работает
-            //почему - хер его знает. Если мне кто объяснит буду благодарен
+            //А может и работает. Но отображается все равно криво
             cursor = db.rawQuery("SELECT * FROM tmp;", null);
             try {
                 while (cursor.moveToNext()) {
@@ -240,7 +238,6 @@ public class DataHelper {
             public void onReceive(final Context context, final Intent intent) {
                 final int requestId = intent.getIntExtra(DataService.EXTRA_REQUEST_ID, -1);
                 final ResultListener listener = mListeners.remove(requestId);
-
                 if (listener != null) {
                     if(intent.getStringExtra(DataService.EXTRA_RESULT_TYPE)
                             .equals(DataService.EXTRA_INSERT_RESULT)){
@@ -274,6 +271,13 @@ public class DataHelper {
 
                     if(intent.getStringExtra(DataService.EXTRA_RESULT_TYPE)
                             .equals(DataService.EXTRA_UPDATE_WORD_RESULT)){
+                        final boolean success = intent.getAction().equals(DataService.ACTION_SUCCESS);
+                        final String res = success ? "OK" : "FAIL";
+                        listener.onStringResult(success, res);
+                    }
+
+                    if(intent.getStringExtra(DataService.EXTRA_RESULT_TYPE)
+                            .equals(DataService.EXTRA_CREATE_SET_RESULT)){
                         final boolean success = intent.getAction().equals(DataService.ACTION_SUCCESS);
                         final String res = success ? "OK" : "FAIL";
                         listener.onStringResult(success, res);
@@ -336,6 +340,19 @@ public class DataHelper {
         intent.putExtra(DataService.EXTRA_REQUEST_ID, mIdCounter);
         context.startService(intent);
         return mIdCounter++;
+    }
+
+    public int createNewSet(Context context, final ArrayList<Word> words, final String setName,
+                            final ResultListener listener){
+        mListeners.put(mIdCounter, listener);
+        Log.d("WPLogs","Creation set request id is " + mIdCounter);
+        Intent intent = new Intent(context, DataService.class);
+        intent.setAction(DataService.ACTION_CREATE_NEW_SET);
+        intent.putExtra(DataService.EXTRA_REQUEST_ID, mIdCounter);
+        intent.putExtra(DataService.EXTRA_WORDS_LIST, words);
+        intent.putExtra(DataService.EXTRA_SET_NAME, setName);
+        context.startService(intent);
+        return  mIdCounter++;
     }
 
     public interface ResultListener {

@@ -22,6 +22,14 @@ public class DataMethod {
     }
 
     public void insertSet(final String name){
+        Cursor cursor = database.rawQuery("SELECT * FROM " + SET_TABLE + " WHERE name = '"
+                + name + "';",  null);
+        if(cursor.getCount()>0){
+            cursor.close();
+            throw new RuntimeException("Set with that name already exists");
+        } else {
+            cursor.close();
+        }
         database.execSQL("INSERT INTO " + SET_TABLE
                 + "(name) VALUES('" + name + "')");
     }
@@ -30,12 +38,21 @@ public class DataMethod {
         String values = "'" + word + "','" + translation + "'," + Integer.toString(correct ? 1 : 0);
         database.execSQL("INSERT INTO " + WORD_TABLE
                 + " (word, translation, isCorrect) VALUES( " + values + " )");
-        //TODO сделать два метода - один про создание нового слова, второй - для добавления свзяи
+    }
+
+    public void createWordInSet(final Word word, final String setName){
+        final String values = "'" + setName + "'," + word.getId() + ",'"+word.getWord() + "', 0";
+        database.execSQL(" INSERT INTO " + WORDS_TO_SETS_TABLE + " (setName, wordId, word, isCorrect) "
+                + "VALUES ( " + values + " );");
     }
 
     public void makeWordCorrect(final String setName, final String word){
-        database.execSQL("UPDATE " + WORDS_TO_SETS_TABLE + " SET isCorrect = 1 WHERE word = '"
-                + word + "' AND setName = '"+setName+"';");
+        //TODO - следует использовать id слова и вообще всю логику работы со словами вести через
+        //TODO классы Word и WordSet
+        //FIXME - если пользователь создаст два перевода одного слова и добавит их в один сет, то
+        //FIXME все они будут отмечаться как корректные по одному запросу
+        database.execSQL("UPDATE " + WORDS_TO_SETS_TABLE + " SET isCorrect = 1 WHERE word = "
+                + word + " AND setName = '"+setName+"';");
     }
 
     public ArrayList<Word> getAllWords(){
@@ -45,13 +62,12 @@ public class DataMethod {
         }
 
         ArrayList<Word> tmp = new ArrayList<>();
-        Log.d("WPLogs","Let's see all words");
         try {
             while (cursor.moveToNext()) {
-                Log.d("WPLogs", "Some word was " + cursor.getString(cursor.getColumnIndex("word")));
                 String word = cursor.getString(cursor.getColumnIndex("word"));
                 String translation = cursor.getString(cursor.getColumnIndex("translation"));
-                tmp.add(new Word(word, translation));
+                Integer id = cursor.getInt(cursor.getColumnIndex("id"));
+                tmp.add(new Word(word, translation, id));
             }
         } finally {
             cursor.close();

@@ -70,12 +70,25 @@ public class CreationFragment extends Fragment implements View.OnClickListener, 
                 if(!deckNameView.getText().toString().equals("")){
                     Toast.makeText(getContext(),"You try to save deck with name " +
                             deckNameView.getText().toString(),Toast.LENGTH_SHORT).show();
-
+                    final String setName = deckNameView.getText().toString();
+                    final ArrayList<Word> words = new ArrayList<>();
+                    for(Integer i = 0; i < allWords.size(); i++){
+                        if(isPicked.get(i)){
+                            words.add(allWords.get(i));
+                        }
+                    }
+                    if(words.isEmpty()){
+                        Toast.makeText(getContext(),"You pick no words, you really need empty set?",
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.d("WPLogs","Try to save new set");
+                        DataHelper.getInstance(getActivity()).createNewSet(getActivity(),words,
+                                setName,this);
+                    }
                 } else {
                     Toast.makeText(getContext(),"You try to save without name",Toast.LENGTH_SHORT).show();
-                } //TODO сохранить созданный список в базу
-                //wordSet.setName(nameView.getText().toString());
-                //int mRequestId = DataHelper.getInstance(getActivity()).add(getActivity(),wordSet, this);
+                }
+
                 break;
         }
     }
@@ -103,7 +116,12 @@ public class CreationFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onStringResult(boolean success, String result) {
-        Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
+        if(success) {
+            Toast.makeText(getActivity(), "Set successfully saved", Toast.LENGTH_SHORT).show();
+            //TODO - по идее, после этого надо перебросить юзера на экран со списокм сетов
+        } else {
+            Toast.makeText(getActivity(), "Probably, this name for set is busy. Try another.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
