@@ -280,7 +280,7 @@ public class DataHelper {
                     if(intent.getStringExtra(DataService.EXTRA_RESULT_TYPE)
                             .equals(DataService.EXTRA_CREATE_SET_RESULT)){
                         final boolean success = intent.getAction().equals(DataService.ACTION_SUCCESS);
-                        final String res = success ? "OK" : "FAIL";
+                        final String res = success ? "Set created" : "FAIL";
                         listener.onStringResult(success, res);
                     }
 
@@ -288,7 +288,7 @@ public class DataHelper {
                             .equals(DataService.EXTRA_ADD_WORD_RESULT)){
                         Log.d("WPLogs","Get response for add word action");
                         final boolean success = intent.getAction().equals(DataService.ACTION_SUCCESS);
-                        final String res = success ? "OK" : "FAIL";
+                        final String res = success ? "Word added" : "FAIL";
                         listener.onStringResult(success, res);
                     }
                 }
