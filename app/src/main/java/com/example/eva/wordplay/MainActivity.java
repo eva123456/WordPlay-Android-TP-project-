@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.eva.wordplay.data.WordSet;
 import com.example.eva.wordplay.fragments.AboutFragment;
+import com.example.eva.wordplay.fragments.AddWordFragment;
 import com.example.eva.wordplay.fragments.BaseFragment;
 import com.example.eva.wordplay.fragments.CreationFragment;
 import com.example.eva.wordplay.fragments.ImportFragment;
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
     private ImportFragment importPage;
     private AboutFragment aboutPage;
     private WordPlayFragment checkPage;
+    private AddWordFragment addWordFragment;
+    //TODO добавить фрагмент для добавления (ха-ха) слова
 
     private static int currentFragmentIndex;
 
@@ -90,6 +93,9 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
         CreationFragment creationFragment = CreationFragment.class.getSimpleName().equals(existingFragmentClass)
                 ? (CreationFragment) fragmentManager.findFragmentById(R.id.content):null;
 
+        AddWordFragment addWordFragment = AddWordFragment.class.getSimpleName().equals(existingFragmentClass)
+                ? (AddWordFragment) fragmentManager.findFragmentById(R.id.content):null;
+
         if(aboutFragment!=null){
             aboutPage = aboutFragment;
             currentFragmentIndex = 3;
@@ -102,6 +108,8 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
         } else if(creationFragment!=null){
             creationPage = creationFragment;
             currentFragmentIndex = 1;
+        } else if(addWordFragment!=null){
+            currentFragmentIndex = 4;
         }
 
     }
@@ -167,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
 
         private void selectItem(int position) {
 
-            Fragment[] pages = {basePage, creationPage, importPage, aboutPage};
+            Fragment[] pages = {basePage, creationPage, importPage, aboutPage, addWordFragment};
 
             if(currentFragmentIndex != position) {
                 if(pages[currentFragmentIndex]!=null) {
@@ -190,6 +198,10 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
                     case 3:
                         aboutPage = aboutPage == null ? new AboutFragment() : aboutPage;
                         setPage(aboutPage);
+                        break;
+                    case 4:
+                        addWordFragment = addWordFragment==null ? new AddWordFragment() : addWordFragment;
+                        setPage(addWordFragment);
                         break;
                 }
                 currentFragmentIndex = position;
