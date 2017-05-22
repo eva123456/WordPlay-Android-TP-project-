@@ -51,7 +51,6 @@ public class NetworkIntentService extends IntentService{
     }
 
     private void handleActionLoadDeck(WordSet targetSet, int requestId){
-        Log.d(TAG, " Service get request for loading deck with name ");
         boolean success = true;
         try{
             NetworkProcessor.processSet(targetSet);
@@ -67,7 +66,6 @@ public class NetworkIntentService extends IntentService{
 
     private void handleActionViewAllDecks(final int requestId){
         ArrayList<WordSet> result;
-        Log.d(TAG, " Service get request for looking deck list");
         boolean success = true;
         try{
             result = NetworkProcessor.processAllDecks();

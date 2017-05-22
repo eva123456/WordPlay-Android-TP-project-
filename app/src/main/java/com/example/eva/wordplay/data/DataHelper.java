@@ -35,8 +35,6 @@ public class DataHelper {
     private static final String WORD_TABLE = "Words";
     private static final String WORDS_TO_SETS_TABLE = "WordsToSets";
 
-    Context context;
-
     private DataHelper() {
     }
 
@@ -44,7 +42,6 @@ public class DataHelper {
         if (Thread.currentThread() != Looper.getMainLooper().getThread()) {
             throw new IllegalStateException();
         }
-        instance.context = context;
 
         if(instance.database == null){
             SQLiteOpenHelper dbHelper = new SQLiteOpenHelper(context, DB_NAME, null, VERSION) {
@@ -61,84 +58,13 @@ public class DataHelper {
                     }
                 }
             };
-
             instance.database = dbHelper.getWritableDatabase();
-
-            /*database.execSQL("DELETE FROM " + WORD_TABLE
-                    +" WHERE word='word 5';");
-            String values = "'word 5', 'слово 5', 0";
-            database.execSQL("INSERT INTO " + WORD_TABLE
-                    + " (word, translation, isCorrect) VALUES( " + values + " )");*/
-            //Внешние ключи не работают в принципе, пам-пам
-            //пока их не включишь, разумеется.
-
-            /*database.execSQL("INSERT INTO " + SET_TABLE
-                    + "(name) VALUES('deck2')");*/
-
-            Log.d("WPLogs","--------Table content-------------");
-            Log.d("WPLogs", "Sets");
-            Cursor cursor = database.rawQuery("SELECT * FROM Sets;", null);
-            try {
-                while (cursor.moveToNext()) {
-                    String name;
-                    //String setName;
-                    name = cursor.getString(cursor.getColumnIndex("name"));
-                    //setName = cursor.getString(cursor.getColumnIndex("setName"));*/
-                    //for(String tmp:cursor.getColumnNames())
-                    Log.d("WPLogs",name);
-                }
-            } finally {
-                cursor.close();
-            }
-            Log.d("WPLogs", "Words");
-            cursor = database.rawQuery("SELECT * FROM Words;", null);
-            try {
-                while (cursor.moveToNext()) {
-                    String word;
-                    String translation;
-                    Integer id;
-                    word = cursor.getString(cursor.getColumnIndex("word"));
-                    translation = cursor.getString(cursor.getColumnIndex("translation"));
-                    id = cursor.getInt(cursor.getColumnIndex("id"));
-                    if(word!=null) {
-                        Log.d("WPLogs", word + " "+ translation + " " + id);
-                    } else {
-                        Log.d("WPLogs", "Word was null, WTF");
-                    }
-                }
-            } finally {
-                cursor.close();
-            }
-
-            Log.d("WPLogs", "Words in sets");
-            cursor = database.rawQuery("SELECT * FROM " + WORDS_TO_SETS_TABLE+ ";", null);
-            try {
-                Integer tmp = 10;
-                while (cursor.moveToNext()) {
-                    String word;
-                    String setName;
-                    Integer isCorrect, id;
-                    word = cursor.getString(cursor.getColumnIndex("word"));
-                    setName = cursor.getString(cursor.getColumnIndex("setName"));
-                    isCorrect = cursor.getInt(cursor.getColumnIndex("isCorrect"));
-                    id = cursor.getInt(cursor.getColumnIndex("wordId"));
-                    //if(word!=null) {
-                        Log.d("WPLogs", word + " "+ isCorrect+" "+setName + " " + id);
-                    //} else {
-                      //  Log.d("WPLogs", "Word was null, WTF");
-                    //}
-                }
-            } finally {
-                cursor.close();
-            }
-
-            Log.d("WPLogs", "Now database version is " + database.getVersion());
         }
         instance.initBroadcastReceiver(context);
         return instance;
     }
 
-    public static SQLiteDatabase getWritableDataBase(){
+    static SQLiteDatabase getWritableDataBase(){
         return database;
     }
 
@@ -221,14 +147,10 @@ public class DataHelper {
                     + "translation text"
                     + ");");
             Log.d("WPLogs","Изменили таблицу со словами. Проверяем, что она изменилась");
-            //db.execSQL("INSERT INTO Words (id, word, translation) "
-            //        + "SELECT id, word, translation FROM tmp"); - не работает
-            //А может и работает. Но отображается все равно криво
             cursor = db.rawQuery("SELECT * FROM tmp;", null);
             try {
                 while (cursor.moveToNext()) {
                     Integer id;
-                    Integer isCorrect;
                     String word;
                     String translation;
                     word = cursor.getString(cursor.getColumnIndex("word"));
@@ -250,6 +172,59 @@ public class DataHelper {
         }
     }
 
+    private static void showDBContent(){
+        Log.d("WPLogs","--------Table content-------------");
+        Log.d("WPLogs", "Sets");
+        Cursor cursor = database.rawQuery("SELECT * FROM Sets;", null);
+        try {
+            while (cursor.moveToNext()) {
+                String name;
+                name = cursor.getString(cursor.getColumnIndex("name"));
+                Log.d("WPLogs",name);
+            }
+        } finally {
+            cursor.close();
+        }
+        Log.d("WPLogs", "Words");
+        cursor = database.rawQuery("SELECT * FROM Words;", null);
+        try {
+            while (cursor.moveToNext()) {
+                String word;
+                String translation;
+                Integer id;
+                word = cursor.getString(cursor.getColumnIndex("word"));
+                translation = cursor.getString(cursor.getColumnIndex("translation"));
+                id = cursor.getInt(cursor.getColumnIndex("id"));
+                if(word!=null) {
+                    Log.d("WPLogs", word + " "+ translation + " " + id);
+                } else {
+                    Log.d("WPLogs", "Word was null, WTF");
+                }
+            }
+        } finally {
+            cursor.close();
+        }
+
+        Log.d("WPLogs", "Words in sets");
+        cursor = database.rawQuery("SELECT * FROM " + WORDS_TO_SETS_TABLE+ ";", null);
+        try {
+            while (cursor.moveToNext()) {
+                String word;
+                String setName;
+                Integer isCorrect, id;
+                word = cursor.getString(cursor.getColumnIndex("word"));
+                setName = cursor.getString(cursor.getColumnIndex("setName"));
+                isCorrect = cursor.getInt(cursor.getColumnIndex("isCorrect"));
+                id = cursor.getInt(cursor.getColumnIndex("wordId"));
+                Log.d("WPLogs", word + " "+ isCorrect+" "+setName + " " + id);
+            }
+        } finally {
+            cursor.close();
+        }
+
+        Log.d("WPLogs", "Now database version is " + database.getVersion());
+    }
+
     private void initBroadcastReceiver(Context context) {
         final IntentFilter filter = new IntentFilter();
         filter.addAction(DataService.ACTION_SUCCESS);
@@ -260,7 +235,6 @@ public class DataHelper {
             public void onReceive(final Context context, final Intent intent) {
                 final int requestId = intent.getIntExtra(DataService.EXTRA_REQUEST_ID, -1);
                 final ResultListener listener = mListeners.remove(requestId);
-                Log.d("WPLogs","Get intent with request id = " + requestId);
                 if (listener != null) {
                     if(intent.getStringExtra(DataService.EXTRA_RESULT_TYPE)
                             .equals(DataService.EXTRA_INSERT_RESULT)){
@@ -308,7 +282,6 @@ public class DataHelper {
 
                     if(intent.getStringExtra(DataService.EXTRA_RESULT_TYPE)
                             .equals(DataService.EXTRA_ADD_WORD_RESULT)){
-                        Log.d("WPLogs","Get response for add word action");
                         final boolean success = intent.getAction().equals(DataService.ACTION_SUCCESS);
                         final String res = success ? "Word added" : "FAIL";
                         listener.onStringResult(success, res);
@@ -318,13 +291,12 @@ public class DataHelper {
         }, filter);
     }
 
-    public int addWord(Context context, Word word, final ResultListener listener){
+    public int addWord(Context context, final Word word, final ResultListener listener){
         mListeners.put(mIdCounter, listener);
         Intent intent = new Intent(context, DataService.class);
         intent.setAction(DataService.ACTION_ADD_WORD);
         intent.putExtra(DataService.EXTRA_REQUEST_ID, mIdCounter);
         intent.putExtra(DataService.EXTRA_WORD_OBJECT, word);
-        Log.d("WPLogs","Sending intent for new word creation");
         context.startService(intent);
         return mIdCounter++;
     }
@@ -340,7 +312,6 @@ public class DataHelper {
         return mIdCounter++;
     }
 
-    //?? Возможно, теперь этот метод не нужен
     public int add(Context context, WordSet newSet, final ResultListener listener){
         mListeners.put(mIdCounter, listener);
         Intent intent = new Intent(context, DataService.class);
@@ -382,7 +353,6 @@ public class DataHelper {
     public int createNewSet(Context context, final ArrayList<Word> words, final String setName,
                             final ResultListener listener){
         mListeners.put(mIdCounter, listener);
-        Log.d("WPLogs","Creation set request id is " + mIdCounter);
         Intent intent = new Intent(context, DataService.class);
         intent.setAction(DataService.ACTION_CREATE_NEW_SET);
         intent.putExtra(DataService.EXTRA_REQUEST_ID, mIdCounter);

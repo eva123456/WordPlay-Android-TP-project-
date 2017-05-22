@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class DataProcessor {
+class DataProcessor {
 
-    public static void addNewWord(final Word word){
+    static void addNewWord(final Word word){
         DataMethod.getInstance().addNewWord(word);
     }
 
-    public static void insertSet(final WordSet newSet){
+    static void insertSet(final WordSet newSet){
         String setName = newSet.getName();
         DataMethod.getInstance().insertSet(setName);
         HashMap<String, String> setWords = newSet.getWords();
@@ -23,29 +23,23 @@ public class DataProcessor {
         }
     }
 
-    public static void createNewSet(final ArrayList<Word> words, final String setName){
+    static void createNewSet(final ArrayList<Word> words, final String setName){
         DataMethod.getInstance().insertSet(setName);
-        Log.d("WPLogs","Set is successfully inserted.");
         for(Word word: words){
-            Log.d("WPLogs","Inserting word "+word.getWord());
-            //DataMethod.getInstance().addNewWord(word);
-            //У слов отсутствуют айдишники
             DataMethod.getInstance().createWordInSet(word, setName);
         }
-        Log.d("WPLogs","All words are successfully inserted.");
     }
 
-    public static WordSet getSetInformation(final String name){
-        WordSet result = DataMethod.getInstance().getSetInfo(name);
-        return result;
-    }
-
-    public static ArrayList<WordSet> getLastSavedSets(){
-        return DataMethod.getInstance().getLastSavedSets();
-    }
-
-    public static void makeWordCorrect(String setName, String word) {
+    static void makeWordCorrect(String setName, String word) {
         DataMethod.getInstance().makeWordCorrect(setName, word);
+    }
+
+    static WordSet getSetInformation(final String name){
+        return DataMethod.getInstance().getSetInfo(name);
+    }
+
+    static ArrayList<WordSet> getLastSavedSets(){
+        return DataMethod.getInstance().getLastSavedSets();
     }
 
     public static ArrayList<Word> getAllWords(){

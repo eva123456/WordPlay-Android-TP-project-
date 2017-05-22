@@ -17,35 +17,34 @@ import com.example.eva.wordplay.data.Word;
 import java.util.ArrayList;
 
 
-public class WordRecyclerAdapter extends RecyclerView.Adapter<WordRecyclerAdapter.ViewHolder> {
+class WordRecyclerAdapter extends RecyclerView.Adapter<WordRecyclerAdapter.ViewHolder> {
 
     private ArrayList<Word> words;
     private ArrayList<Boolean> isPicked;
 
-    public WordRecyclerAdapter(ArrayList<Word> words, ArrayList<Boolean> isPicked) {
+    WordRecyclerAdapter(ArrayList<Word> words, ArrayList<Boolean> isPicked) {
         this.words = words;
         this.isPicked = isPicked;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView word;
         TextView translation;
         LinearLayout layout;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             word = (TextView) itemView.findViewById(R.id.word);
             translation = (TextView) itemView.findViewById(R.id.translation);
             layout = (LinearLayout) itemView.findViewById(R.id.word_layout);
-            //unpickWord();
         }
 
-        public void pickWord() {
+        void pickWord() {
             layout.setBackgroundColor(Color.parseColor("#FFFF88"));
         }
 
-        public void unpickWord() {
+        void unpickWord() {
             layout.setBackgroundColor(Color.parseColor("#ffffff"));
         }
     }

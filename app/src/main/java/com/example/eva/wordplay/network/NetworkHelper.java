@@ -48,7 +48,8 @@ public class NetworkHelper {
                                 .getSerializableExtra(NetworkIntentService.EXTRA_DECKS_RESULT);
                         listener.onServerSetListResult(serverSets);
 
-                    } else if(intent.getStringExtra(NetworkIntentService.EXTRA_RESULT_TYPE)
+                    }
+                    if(intent.getStringExtra(NetworkIntentService.EXTRA_RESULT_TYPE)
                             .equals(NetworkIntentService.EXTRA_TYPE_LOAD_DECK)) {
 
                         final boolean success = intent.getAction().equals(NetworkIntentService.ACTION_WEB_RESULT_SUCCESS);

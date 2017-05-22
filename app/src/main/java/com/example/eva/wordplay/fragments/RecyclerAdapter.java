@@ -15,22 +15,22 @@ import com.example.eva.wordplay.data.WordSet;
 import java.util.ArrayList;
 
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
+class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
     private ArrayList<WordSet> wordSets;
 
-    public RecyclerAdapter(ArrayList<WordSet> wordSets){
+    RecyclerAdapter(ArrayList<WordSet> wordSets){
         this.wordSets = wordSets;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
         CardView deckCard;
         TextView deckName;
         TextView percent;
         ImageView justForFun;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             deckCard = (CardView) itemView.findViewById(R.id.deckCard);
             deckName = (TextView) itemView.findViewById(R.id.deckName);
@@ -43,8 +43,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public RecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View newView = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_item, parent, false);
-        ViewHolder viewHolder = new ViewHolder(newView);
-        return viewHolder;
+        return new ViewHolder(newView);
     }
 
      @Override
@@ -58,7 +57,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         return wordSets.size();
     }
 
-    public ArrayList<WordSet> getWordSets() {
+    ArrayList<WordSet> getWordSets() {
         if(wordSets!=null)
             return wordSets;
         else

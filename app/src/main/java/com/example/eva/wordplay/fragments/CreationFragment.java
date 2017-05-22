@@ -82,7 +82,6 @@ public class CreationFragment extends Fragment implements View.OnClickListener,
                         Toast.makeText(getContext(),"You pick no words, you really need empty set?",
                                 Toast.LENGTH_SHORT).show();
                     } else {
-                        Log.d("WPLogs","Try to save new set");
                         DataHelper.getInstance(getActivity()).createNewSet(getActivity(),words,
                                 setName,this);
                     }
@@ -96,7 +95,6 @@ public class CreationFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onWordArrayResult(boolean success, ArrayList<Word> result) {
-        Log.d("WPLogs", "Got all words " + result.size());
         if(success){
             allWords = result;
             isPicked = new ArrayList<>(Collections.nCopies(result.size(), false));
@@ -104,7 +102,6 @@ public class CreationFragment extends Fragment implements View.OnClickListener,
             recyclerView.setAdapter(adapter);
             layoutManager = new LinearLayoutManager(getActivity());
             recyclerView.setLayoutManager(layoutManager);
-            //adapter.notifyItemInserted();
 
             recyclerView.addOnItemTouchListener(new RecyclerClickListener(getActivity()) {
                 @Override

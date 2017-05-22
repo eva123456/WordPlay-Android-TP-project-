@@ -36,8 +36,6 @@ public class ImportFragment extends Fragment implements  NetworkHelper.ResultLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.import_fragment, null);
-        Log.d("WPLogs", "BaseFragment:onCreateView");
-
         NetworkHelper.getInstance(getActivity()).viewAllDecksRequest(getActivity(), this);
         recyclerView = (RecyclerView) view.findViewById(recyclerViewImport);
         layoutManager = new LinearLayoutManager(getActivity());
