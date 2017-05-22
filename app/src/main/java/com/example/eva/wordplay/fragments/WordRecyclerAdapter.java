@@ -3,6 +3,7 @@ package com.example.eva.wordplay.fragments;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +20,11 @@ import java.util.ArrayList;
 public class WordRecyclerAdapter extends RecyclerView.Adapter<WordRecyclerAdapter.ViewHolder> {
 
     private ArrayList<Word> words;
+    private ArrayList<Boolean> isPicked;
 
-    public WordRecyclerAdapter(ArrayList<Word> words){
+    public WordRecyclerAdapter(ArrayList<Word> words, ArrayList<Boolean> isPicked) {
         this.words = words;
+        this.isPicked = isPicked;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -34,15 +37,15 @@ public class WordRecyclerAdapter extends RecyclerView.Adapter<WordRecyclerAdapte
             super(itemView);
             word = (TextView) itemView.findViewById(R.id.word);
             translation = (TextView) itemView.findViewById(R.id.translation);
-            layout = (LinearLayout)itemView.findViewById(R.id.word_layout);
+            layout = (LinearLayout) itemView.findViewById(R.id.word_layout);
             //unpickWord();
         }
 
-        public void pickWord(){
+        public void pickWord() {
             layout.setBackgroundColor(Color.parseColor("#FFFF88"));
         }
 
-        public void unpickWord(){
+        public void unpickWord() {
             layout.setBackgroundColor(Color.parseColor("#ffffff"));
         }
     }
@@ -55,6 +58,11 @@ public class WordRecyclerAdapter extends RecyclerView.Adapter<WordRecyclerAdapte
 
     @Override
     public void onBindViewHolder(WordRecyclerAdapter.ViewHolder holder, int position) {
+        if(isPicked.get(position)){
+            holder.pickWord();
+        } else {
+            holder.unpickWord();
+        }
         holder.word.setText(words.get(position).getWord());
         holder.translation.setText(words.get(position).getTranslation());
     }
@@ -65,3 +73,5 @@ public class WordRecyclerAdapter extends RecyclerView.Adapter<WordRecyclerAdapte
     }
 
 }
+
+

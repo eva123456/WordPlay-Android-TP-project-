@@ -1,8 +1,9 @@
 package com.example.eva.wordplay.fragments;
 
-import android.net.wifi.WifiManager;
+import android.support.annotation.IntegerRes;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,9 +21,9 @@ import com.example.eva.wordplay.data.WordSet;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.logging.Logger;
 
-public class CreationFragment extends Fragment implements View.OnClickListener, DataHelper.ResultListener{
+public class CreationFragment extends Fragment implements View.OnClickListener,
+        DataHelper.ResultListener{
 
     private Button btnSave;
     private View view;
@@ -52,7 +53,7 @@ public class CreationFragment extends Fragment implements View.OnClickListener, 
 
     }
 
-    private void prepareDeck(RecyclerView recyclerView, View view, int position) {
+    private void wordClick(RecyclerView recyclerView, View view, int position) {
         WordRecyclerAdapter.ViewHolder viewHolder = (WordRecyclerAdapter.ViewHolder) recyclerView.getChildViewHolder(view);
         if(!isPicked.get(position)) {
             isPicked.set(position, true);
@@ -99,7 +100,7 @@ public class CreationFragment extends Fragment implements View.OnClickListener, 
         if(success){
             allWords = result;
             isPicked = new ArrayList<>(Collections.nCopies(result.size(), false));
-            adapter = new WordRecyclerAdapter(result);
+            adapter = new WordRecyclerAdapter(result, isPicked);
             recyclerView.setAdapter(adapter);
             layoutManager = new LinearLayoutManager(getActivity());
             recyclerView.setLayoutManager(layoutManager);
@@ -108,7 +109,7 @@ public class CreationFragment extends Fragment implements View.OnClickListener, 
             recyclerView.addOnItemTouchListener(new RecyclerClickListener(getActivity()) {
                 @Override
                 public void onItemClick(RecyclerView recyclerView, View view, int position) {
-                    prepareDeck(recyclerView, view, position);
+                    wordClick(recyclerView, view, position);
                 }
             });
 
