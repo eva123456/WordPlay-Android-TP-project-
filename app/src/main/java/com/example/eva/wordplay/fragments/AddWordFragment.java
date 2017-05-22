@@ -2,6 +2,7 @@ package com.example.eva.wordplay.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +51,7 @@ public class AddWordFragment extends Fragment implements View.OnClickListener, D
     }
 
     public interface wordCreateListener{
-        void onWordCreated();
+        void onWordCreated(Word w);
     }
 
     public void registerWordCreateListener(wordCreateListener listener){
@@ -61,8 +62,8 @@ public class AddWordFragment extends Fragment implements View.OnClickListener, D
     public void onStringResult(boolean success, String result) {
         if(success) {
             Toast.makeText(getActivity(), "Word successfully added.", Toast.LENGTH_SHORT).show();
-            //TODO - по идее, после этого надо перебросить юзера на экран со списокм сетов
-            listener.onWordCreated();
+            Word word = new Word(wordEdit.getText().toString(), translationEdit.getText().toString(), null);
+            listener.onWordCreated(word);
         } else {
             Toast.makeText(getActivity(), "Probably, this word already exists in DB." +
                     " Try another.", Toast.LENGTH_SHORT).show();

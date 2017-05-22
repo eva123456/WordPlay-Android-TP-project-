@@ -1,7 +1,9 @@
 package com.example.eva.wordplay.fragments;
 
 import android.app.FragmentTransaction;
+import android.graphics.Color;
 import android.net.wifi.WifiManager;
+import android.support.annotation.BoolRes;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -29,12 +31,12 @@ import java.util.logging.Logger;
 public class CreationFragment extends Fragment implements View.OnClickListener, DataHelper.ResultListener, AddWordFragment.wordCreateListener{
 
     private Button btnSave, btnWordCreate;
-    //private LinearLayout wordCreateLayout;
     private FrameLayout wordFormContainer;
     private View view;
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
+    //private RecyclerView.Adapter adapter;
+    private WordRecyclerAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
     private EditText deckNameView;
@@ -156,9 +158,22 @@ public class CreationFragment extends Fragment implements View.OnClickListener, 
 
     }
 
+    private void setWordInFront(Word element){
+        Word tmp = allWords.get(0);
+        allWords.set(0, element);
+        allWords.add(tmp);
+        Boolean firstPick = isPicked.get(0);
+        isPicked.set(0, false);
+        isPicked.add(firstPick);
+    }
+
+
     @Override
-    public void onWordCreated() {
+    public void onWordCreated(Word word) {
         wordFormContainer.setVisibility(View.GONE);
         btnWordCreate.setVisibility(View.VISIBLE);
+        setWordInFront(word);
+        adapter.notifyDataSetChanged();
+        adapter.setWordCreated();
     }
 }
