@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -25,25 +27,81 @@
             />
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:scrollbars="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
-
     <Button
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:id="@+id/createDeck"
-        android:text="Save deck!"
+        android:layout_margin="8dp"
+        android:id="@+id/new_Word"
+        android:text="create new word"
         android:textColor="@color/colorText"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_weight="0"
         android:textStyle="normal|bold"
         android:background="@drawable/round_corners" />
 
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/new_word_fragment"
+        android:visibility="gone">
+    </FrameLayout>
+
+    <!---<LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/new_word_layout"
+        android:visibility="gone">
+        <fragment
+            android:id="@+id/new_word_fragment"
+            android:name="com.example.eva.wordplay.fragments.AddWordFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout="@layout/add_word_fragment">
+        </fragment>
+    </LinearLayout>-->
+
+
+
+    <!-- <android.support.design.widget.CoordinatorLayout
+         xmlns:android="http://schemas.android.com/apk/res/android"
+         xmlns:app="http://schemas.android.com/apk/res-auto"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"> -->
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_margin="8dp"
+            android:scrollbars="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+     <!--   <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:clickable="true"
+            app:layout_anchor="@id/recyclerView"
+            app:layout_anchorGravity="bottom|right|end"/>
+
+    </android.support.design.widget.CoordinatorLayout> -->
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="8dp"
+        android:id="@+id/createDeck"
+        android:text="Save deck!"
+        android:textColor="@color/colorText"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:textStyle="normal|bold"
+        android:background="@drawable/round_corners" />
+
 
 </LinearLayout>
+
+
+
+

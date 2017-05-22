@@ -166,6 +166,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
         setPage(basePage);
     }
 
+
     public class NavigationDrawerListener implements AdapterView.OnItemClickListener {
         private final String TAG = NavigationDrawerListener.class.getSimpleName();
         @Override

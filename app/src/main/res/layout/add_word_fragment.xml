@@ -3,6 +3,18 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/deckCard"
+        android:layout_margin="16dp"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:layout_gravity="center">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,6 +41,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_margin="8dp"
+        android:layout_below="@id/wordLayout"
         android:id="@+id/translationLayout">
         <TextView
             android:id="@+id/translation"
@@ -51,11 +64,14 @@
         android:layout_height="48dp"
         android:layout_marginTop="16dp"
         android:id="@+id/addWord"
-        android:text="Add word"
+        android:text="Create"
         android:textColor="@color/colorText"
         style="@style/Widget.AppCompat.Button.Colored"
         android:textStyle="normal|bold"
+        android:layout_below="@id/translationLayout"
         android:background="@drawable/round_corners">
     </Button>
 
+</RelativeLayout>
+    </android.support.v7.widget.CardView>
 </LinearLayout>

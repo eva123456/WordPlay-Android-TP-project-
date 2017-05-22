@@ -20,6 +20,7 @@ public class AddWordFragment extends Fragment implements View.OnClickListener, D
 
     private EditText wordEdit, translationEdit;
     private Button saveWord;
+    private wordCreateListener listener;
 
 
     @Override
@@ -45,8 +46,15 @@ public class AddWordFragment extends Fragment implements View.OnClickListener, D
                 } else {
                     DataHelper.getInstance(getActivity()).addWord(getActivity(),new Word(word, translation),this);
                 }
-
         }
+    }
+
+    public interface wordCreateListener{
+        void onWordCreated();
+    }
+
+    public void registerWordCreateListener(wordCreateListener listener){
+        this.listener = listener;
     }
 
     @Override
@@ -54,6 +62,7 @@ public class AddWordFragment extends Fragment implements View.OnClickListener, D
         if(success) {
             Toast.makeText(getActivity(), "Word successfully added.", Toast.LENGTH_SHORT).show();
             //TODO - по идее, после этого надо перебросить юзера на экран со списокм сетов
+            listener.onWordCreated();
         } else {
             Toast.makeText(getActivity(), "Probably, this word already exists in DB." +
                     " Try another.", Toast.LENGTH_SHORT).show();

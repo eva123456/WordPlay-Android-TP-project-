@@ -1,8 +1,10 @@
 package com.example.eva.wordplay.fragments;
 
+import android.app.FragmentTransaction;
 import android.net.wifi.WifiManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.eva.wordplay.R;
@@ -22,9 +26,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.logging.Logger;
 
-public class CreationFragment extends Fragment implements View.OnClickListener, DataHelper.ResultListener{
+public class CreationFragment extends Fragment implements View.OnClickListener, DataHelper.ResultListener, AddWordFragment.wordCreateListener{
 
-    private Button btnSave;
+    private Button btnSave, btnWordCreate;
+    //private LinearLayout wordCreateLayout;
+    private FrameLayout wordFormContainer;
     private View view;
 
     private RecyclerView recyclerView;
@@ -32,6 +38,7 @@ public class CreationFragment extends Fragment implements View.OnClickListener, 
     private RecyclerView.LayoutManager layoutManager;
 
     private EditText deckNameView;
+    private AddWordFragment addWordFragment;
 
     private ArrayList<Word> allWords = new ArrayList<>();
     private ArrayList<Boolean> isPicked = new ArrayList<>();
@@ -42,8 +49,21 @@ public class CreationFragment extends Fragment implements View.OnClickListener, 
 
         view = inflater.inflate(R.layout.create_edit_deck_fragment, null);
         btnSave = (Button) view.findViewById(R.id.createDeck);
+        btnWordCreate = (Button) view.findViewById(R.id.new_Word);
+        wordFormContainer = (FrameLayout) view.findViewById(R.id.new_word_fragment);
+
+        btnWordCreate.setOnClickListener(this);
         btnSave.setOnClickListener(this);
         deckNameView = (EditText) view.findViewById(R.id.deckName);
+
+        addWordFragment = new AddWordFragment();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.new_word_fragment, addWordFragment);
+        fragmentTransaction.commit();
+
+        addWordFragment.registerWordCreateListener(this);
+
 
         DataHelper.getInstance(getActivity()).getAllWords(getActivity(), this);
 
@@ -88,8 +108,10 @@ public class CreationFragment extends Fragment implements View.OnClickListener, 
                 } else {
                     Toast.makeText(getContext(),"You try to save without name",Toast.LENGTH_SHORT).show();
                 }
-
                 break;
+            case R.id.new_Word:
+                btnWordCreate.setVisibility(View.GONE);
+                wordFormContainer.setVisibility(View.VISIBLE);
         }
     }
 
@@ -132,5 +154,11 @@ public class CreationFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onArraySetResult(boolean success, ArrayList<WordSet> result) {
 
+    }
+
+    @Override
+    public void onWordCreated() {
+        wordFormContainer.setVisibility(View.GONE);
+        btnWordCreate.setVisibility(View.VISIBLE);
     }
 }
