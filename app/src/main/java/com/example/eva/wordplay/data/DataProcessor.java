@@ -28,6 +28,8 @@ public class DataProcessor {
         Log.d("WPLogs","Set is successfully inserted.");
         for(Word word: words){
             Log.d("WPLogs","Inserting word "+word.getWord());
+            //DataMethod.getInstance().addNewWord(word);
+            //У слов отсутствуют айдишники
             DataMethod.getInstance().createWordInSet(word, setName);
         }
         Log.d("WPLogs","All words are successfully inserted.");

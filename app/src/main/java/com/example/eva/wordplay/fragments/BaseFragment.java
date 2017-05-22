@@ -74,6 +74,9 @@ public class BaseFragment extends Fragment implements DataHelper.ResultListener{
 
     @Override
     public void onArraySetResult(boolean success, ArrayList<WordSet> result) {
+        for(WordSet set : result){
+            //Log.d("WPLogs", set.);
+        }
         adapter = new RecyclerAdapter(result);
         recyclerView.setAdapter(adapter);
     }

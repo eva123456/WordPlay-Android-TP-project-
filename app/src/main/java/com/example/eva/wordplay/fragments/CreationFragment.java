@@ -103,6 +103,7 @@ public class CreationFragment extends Fragment implements View.OnClickListener, 
             recyclerView.setAdapter(adapter);
             layoutManager = new LinearLayoutManager(getActivity());
             recyclerView.setLayoutManager(layoutManager);
+            //adapter.notifyItemInserted();
 
             recyclerView.addOnItemTouchListener(new RecyclerClickListener(getActivity()) {
                 @Override

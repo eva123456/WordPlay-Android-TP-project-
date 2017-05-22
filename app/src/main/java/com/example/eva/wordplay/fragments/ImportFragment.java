@@ -87,6 +87,7 @@ public class ImportFragment extends Fragment implements  NetworkHelper.ResultLis
             words.add(wordObj);
         }
         DataHelper.getInstance(getActivity()).createNewSet(getActivity(), words, targetSet.getName(), this);
+
     }
 
     @Override

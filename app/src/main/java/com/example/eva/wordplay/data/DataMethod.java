@@ -56,6 +56,17 @@ public class DataMethod {
     }
 
     public void createWordInSet(final Word word, final String setName){
+        if(word.getId()==null) {
+            final Cursor cursor = database.rawQuery("SELECT * FROM " + WORD_TABLE + " WHERE word = '"
+                    + word.getWord() + "';", null);
+            try {
+                while (cursor.moveToNext()) {
+                    word.setId(cursor.getInt(cursor.getColumnIndex("id")));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
         final String values = "'" + setName + "'," + word.getId() + ",'"+word.getWord() + "', 0";
         database.execSQL(" INSERT INTO " + WORDS_TO_SETS_TABLE + " (setName, wordId, word, isCorrect) "
                 + "VALUES ( " + values + " );");
@@ -66,8 +77,8 @@ public class DataMethod {
         //TODO классы Word и WordSet
         //FIXME - если пользователь создаст два перевода одного слова и добавит их в один сет, то
         //FIXME все они будут отмечаться как корректные по одному запросу
-        database.execSQL("UPDATE " + WORDS_TO_SETS_TABLE + " SET isCorrect = 1 WHERE word = "
-                + word + " AND setName = '"+setName+"';");
+        database.execSQL("UPDATE " + WORDS_TO_SETS_TABLE + " SET isCorrect = 1 WHERE word = '"
+                + word + "' AND setName = '"+setName+"';");
     }
 
     public ArrayList<Word> getAllWords(){
@@ -101,17 +112,20 @@ public class DataMethod {
 
         WordSet tmp = new WordSet();
         tmp.setName(name);
-        String word, translation;
-        int correct = 0;
+        Log.d("WPLogs", "Processing set with name " + name);
         try {
             while (cursor.moveToNext()) {
+                String word, translation;
+                int correct;
                 word = cursor.getString(cursor.getColumnIndex("word"));
                 translation = cursor.getString(cursor.getColumnIndex("translation"));
                 tmp.addWord(word, translation);
                 correct = cursor.getInt(cursor.getColumnIndex("isCorrect"));
+                Log.d("WPLogs", "Current word is " + word + " and it is " + correct);
                 if (correct != 0) {
                     tmp.markWordCorrect(word);
                 }
+
             }
         } finally {
             cursor.close();

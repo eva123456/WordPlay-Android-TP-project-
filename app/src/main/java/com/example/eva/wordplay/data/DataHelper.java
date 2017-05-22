@@ -90,21 +90,43 @@ public class DataHelper {
             } finally {
                 cursor.close();
             }
-
             Log.d("WPLogs", "Words");
-
             cursor = database.rawQuery("SELECT * FROM Words;", null);
             try {
                 while (cursor.moveToNext()) {
                     String word;
                     String translation;
+                    Integer id;
                     word = cursor.getString(cursor.getColumnIndex("word"));
                     translation = cursor.getString(cursor.getColumnIndex("translation"));
+                    id = cursor.getInt(cursor.getColumnIndex("id"));
                     if(word!=null) {
-                        Log.d("WPLogs", word + " "+ translation);
+                        Log.d("WPLogs", word + " "+ translation + " " + id);
                     } else {
                         Log.d("WPLogs", "Word was null, WTF");
                     }
+                }
+            } finally {
+                cursor.close();
+            }
+
+            Log.d("WPLogs", "Words in sets");
+            cursor = database.rawQuery("SELECT * FROM " + WORDS_TO_SETS_TABLE+ ";", null);
+            try {
+                Integer tmp = 10;
+                while (cursor.moveToNext()) {
+                    String word;
+                    String setName;
+                    Integer isCorrect, id;
+                    word = cursor.getString(cursor.getColumnIndex("word"));
+                    setName = cursor.getString(cursor.getColumnIndex("setName"));
+                    isCorrect = cursor.getInt(cursor.getColumnIndex("isCorrect"));
+                    id = cursor.getInt(cursor.getColumnIndex("wordId"));
+                    //if(word!=null) {
+                        Log.d("WPLogs", word + " "+ isCorrect+" "+setName + " " + id);
+                    //} else {
+                      //  Log.d("WPLogs", "Word was null, WTF");
+                    //}
                 }
             } finally {
                 cursor.close();
