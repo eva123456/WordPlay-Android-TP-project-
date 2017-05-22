@@ -39,13 +39,13 @@ public class BaseFragment extends Fragment implements DataHelper.ResultListener{
         recyclerView.addOnItemTouchListener(new RecyclerClickListener(getActivity()) {
             @Override
             public void onItemClick(RecyclerView recyclerView, View view, int position) {
-                prepareDeck(recyclerView, view, position);
+                prepareDeck(recyclerView, view);
             }
         });
         return view;
     }
 
-    private void prepareDeck(RecyclerView recyclerView, View view, int position) {
+    private void prepareDeck(RecyclerView recyclerView, View view) {
         RecyclerAdapter.ViewHolder viewHolder = (RecyclerAdapter.ViewHolder) recyclerView.getChildViewHolder(view);
         String deckName = (String) viewHolder.deckName.getText();
         DataHelper.getInstance(getActivity()).get(getActivity(),deckName, this);

@@ -4,6 +4,7 @@ import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.net.wifi.WifiManager;
 import android.support.annotation.BoolRes;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -26,7 +27,6 @@ import com.example.eva.wordplay.data.WordSet;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.logging.Logger;
 
 public class CreationFragment extends Fragment implements View.OnClickListener, DataHelper.ResultListener, AddWordFragment.wordCreateListener{
 
@@ -35,7 +35,6 @@ public class CreationFragment extends Fragment implements View.OnClickListener, 
     private View view;
 
     private RecyclerView recyclerView;
-    //private RecyclerView.Adapter adapter;
     private WordRecyclerAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
@@ -48,7 +47,6 @@ public class CreationFragment extends Fragment implements View.OnClickListener, 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         view = inflater.inflate(R.layout.create_edit_deck_fragment, null);
         btnSave = (Button) view.findViewById(R.id.createDeck);
         btnWordCreate = (Button) view.findViewById(R.id.new_Word);
@@ -66,15 +64,13 @@ public class CreationFragment extends Fragment implements View.OnClickListener, 
 
         addWordFragment.registerWordCreateListener(this);
 
-
         DataHelper.getInstance(getActivity()).getAllWords(getActivity(), this);
-
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         return view;
 
     }
 
-    private void prepareDeck(RecyclerView recyclerView, View view, int position) {
+    private void wordClick(RecyclerView recyclerView, View view, int position) {
         WordRecyclerAdapter.ViewHolder viewHolder = (WordRecyclerAdapter.ViewHolder) recyclerView.getChildViewHolder(view);
         if(!isPicked.get(position)) {
             isPicked.set(position, true);
@@ -103,7 +99,6 @@ public class CreationFragment extends Fragment implements View.OnClickListener, 
                         Toast.makeText(getContext(),"You pick no words, you really need empty set?",
                                 Toast.LENGTH_SHORT).show();
                     } else {
-                        Log.d("WPLogs","Try to save new set");
                         DataHelper.getInstance(getActivity()).createNewSet(getActivity(),words,
                                 setName,this);
                     }
@@ -119,11 +114,10 @@ public class CreationFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onWordArrayResult(boolean success, ArrayList<Word> result) {
-        Log.d("WPLogs", "Got all words " + result.size());
         if(success){
             allWords = result;
             isPicked = new ArrayList<>(Collections.nCopies(result.size(), false));
-            adapter = new WordRecyclerAdapter(result);
+            adapter = new WordRecyclerAdapter(allWords, isPicked);
             recyclerView.setAdapter(adapter);
             layoutManager = new LinearLayoutManager(getActivity());
             recyclerView.setLayoutManager(layoutManager);
@@ -131,7 +125,7 @@ public class CreationFragment extends Fragment implements View.OnClickListener, 
             recyclerView.addOnItemTouchListener(new RecyclerClickListener(getActivity()) {
                 @Override
                 public void onItemClick(RecyclerView recyclerView, View view, int position) {
-                    prepareDeck(recyclerView, view, position);
+                    wordClick(recyclerView, view, position);
                 }
             });
 

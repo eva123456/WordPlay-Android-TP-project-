@@ -23,7 +23,6 @@ public class AddWordFragment extends Fragment implements View.OnClickListener, D
     private Button saveWord;
     private wordCreateListener listener;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

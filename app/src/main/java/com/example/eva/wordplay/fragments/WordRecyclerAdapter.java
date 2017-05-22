@@ -3,6 +3,7 @@ package com.example.eva.wordplay.fragments;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,22 +17,23 @@ import com.example.eva.wordplay.data.Word;
 import java.util.ArrayList;
 
 
-public class WordRecyclerAdapter extends RecyclerView.Adapter<WordRecyclerAdapter.ViewHolder> {
+class WordRecyclerAdapter extends RecyclerView.Adapter<WordRecyclerAdapter.ViewHolder> {
 
     private ArrayList<Word> words;
-    Boolean wordCreated;
+    private Boolean wordCreated;
+    private ArrayList<Boolean> isPicked;
 
-    public WordRecyclerAdapter(ArrayList<Word> words){
+    WordRecyclerAdapter(ArrayList<Word> words, ArrayList<Boolean> isPicked) {
         this.wordCreated = false;
         this.words = words;
+        this.isPicked = isPicked;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView word;
         TextView translation;
         LinearLayout layout;
-
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -40,11 +42,11 @@ public class WordRecyclerAdapter extends RecyclerView.Adapter<WordRecyclerAdapte
             layout = (LinearLayout)itemView.findViewById(R.id.word_layout);
         }
 
-        public void pickWord(){
+        void pickWord() {
             layout.setBackgroundColor(Color.parseColor("#FFFF88"));
         }
 
-        public void unpickWord(){
+        void unpickWord() {
             layout.setBackgroundColor(Color.parseColor("#ffffff"));
         }
     }
@@ -57,6 +59,11 @@ public class WordRecyclerAdapter extends RecyclerView.Adapter<WordRecyclerAdapte
 
     @Override
     public void onBindViewHolder(WordRecyclerAdapter.ViewHolder holder, int position) {
+        if(isPicked.get(position)){
+            holder.pickWord();
+        } else {
+            holder.unpickWord();
+        }
         holder.word.setText(words.get(position).getWord());
         holder.translation.setText(words.get(position).getTranslation());
         if((position == 0)&&wordCreated){
@@ -69,10 +76,11 @@ public class WordRecyclerAdapter extends RecyclerView.Adapter<WordRecyclerAdapte
         wordCreated = true;
     }
 
-
     @Override
     public int getItemCount() {
         return words.size();
     }
 
 }
+
+

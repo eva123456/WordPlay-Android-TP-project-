@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.example.eva.wordplay.data.WordSet;
@@ -14,7 +15,6 @@ import java.util.Map;
 
 public class NetworkHelper {
 
-    private final static String TAG = NetworkHelper.class.getSimpleName();
     private int mIdCounter = 1;
     private final Map<Integer, ResultListener> mListeners = new Hashtable<>();
 
@@ -48,7 +48,8 @@ public class NetworkHelper {
                                 .getSerializableExtra(NetworkIntentService.EXTRA_DECKS_RESULT);
                         listener.onServerSetListResult(serverSets);
 
-                    } else if(intent.getStringExtra(NetworkIntentService.EXTRA_RESULT_TYPE)
+                    }
+                    if(intent.getStringExtra(NetworkIntentService.EXTRA_RESULT_TYPE)
                             .equals(NetworkIntentService.EXTRA_TYPE_LOAD_DECK)) {
 
                         final boolean success = intent.getAction().equals(NetworkIntentService.ACTION_WEB_RESULT_SUCCESS);
@@ -66,7 +67,6 @@ public class NetworkHelper {
         intent.setAction(NetworkIntentService.ACTION_VIEW_DECKS);
         intent.putExtra(NetworkIntentService.EXTRA_REQUEST_ID, mIdCounter);
         context.startService(intent);
-
         return mIdCounter++;
     }
 
@@ -80,9 +80,20 @@ public class NetworkHelper {
         return mIdCounter++;
     }
 
+    public void removeListener(ResultListener listener){
+        final ArrayList<Integer> requestsToRemove = new ArrayList<>();
+        for(Integer rId:mListeners.keySet()){
+            if(mListeners.get(rId).equals(listener)){
+                requestsToRemove.add(rId);
+            }
+        }
+        for(Integer rId:requestsToRemove){
+            mListeners.remove(rId);
+        }
+    }
+
     public interface ResultListener {
         void onServerSetListResult(final ArrayList<WordSet> serverSets);
-
         void onDeckLoadedResult(final boolean success, WordSet targetSet);
     }
 }

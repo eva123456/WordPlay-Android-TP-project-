@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
     private AboutFragment aboutPage;
     private WordPlayFragment checkPage;
     private AddWordFragment addWordFragment;
-    //TODO поменять порядок фрагментов
 
     private static int currentFragmentIndex;
 
@@ -168,7 +167,6 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
 
 
     public class NavigationDrawerListener implements AdapterView.OnItemClickListener {
-        private final String TAG = NavigationDrawerListener.class.getSimpleName();
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             selectItem(position);

@@ -36,8 +36,6 @@ public class ImportFragment extends Fragment implements  NetworkHelper.ResultLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.import_fragment, null);
-        Log.d("WPLogs", "BaseFragment:onCreateView");
-
         NetworkHelper.getInstance(getActivity()).viewAllDecksRequest(getActivity(), this);
         recyclerView = (RecyclerView) view.findViewById(recyclerViewImport);
         layoutManager = new LinearLayoutManager(getActivity());
@@ -55,6 +53,12 @@ public class ImportFragment extends Fragment implements  NetworkHelper.ResultLis
         });
 
         return view;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        NetworkHelper.getInstance(getActivity()).removeListener(this);
     }
 
     private void loadDeck(String deckName){
@@ -83,10 +87,10 @@ public class ImportFragment extends Fragment implements  NetworkHelper.ResultLis
         while(it.hasNext()){
             HashMap.Entry pair = (HashMap.Entry)it.next();
             Word wordObj = new Word((String)pair.getKey(), (String)pair.getValue());
-            DataHelper.getInstance(getActivity()).addWord(getActivity(),wordObj,this);
             words.add(wordObj);
         }
         DataHelper.getInstance(getActivity()).createNewSet(getActivity(), words, targetSet.getName(), this);
+
     }
 
     @Override

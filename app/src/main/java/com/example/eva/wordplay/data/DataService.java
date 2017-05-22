@@ -8,6 +8,8 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.concurrent.Executor;
 
 
@@ -84,13 +86,11 @@ public class DataService extends IntentService {
                 final int requestId = intent.getIntExtra(EXTRA_REQUEST_ID, -1);
                 final ArrayList<Word> words = (ArrayList<Word>) intent.getSerializableExtra(EXTRA_WORDS_LIST);
                 final String setName = intent.getStringExtra(EXTRA_SET_NAME);
-                Log.d("WPLogs","Get intent about saving new set. Request id is "+requestId);
                 handleCreateNewSetAction(requestId, setName, words);
             }
 
             if(ACTION_ADD_WORD.equals(action)){
                 final int requestId = intent.getIntExtra(EXTRA_REQUEST_ID, -1);
-                Log.d("WPLogs","Handle intent for new word creation with id = " + requestId);
                 final Word word = (Word)intent.getSerializableExtra(EXTRA_WORD_OBJECT);
                 handleAddWordAction(requestId, word);
             }
@@ -109,7 +109,6 @@ public class DataService extends IntentService {
         intent.putExtra(EXTRA_REQUEST_ID, rId);
 
         intent.putExtra(EXTRA_RESULT_TYPE, EXTRA_ADD_WORD_RESULT);
-        Log.d("WPLogs","Sending response intent ");
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
@@ -126,7 +125,6 @@ public class DataService extends IntentService {
         intent.putExtra(EXTRA_REQUEST_ID, rId);
 
         intent.putExtra(EXTRA_RESULT_TYPE, EXTRA_CREATE_SET_RESULT);
-        Log.d("WPLogs","Sending response intent ");
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 

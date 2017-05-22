@@ -15,13 +15,13 @@ public class DataMethod {
     private SQLiteDatabase database = DataHelper.getWritableDataBase();
     private static DataMethod instance = new DataMethod();
 
-    DataMethod(){}
+    private DataMethod(){}
 
     public synchronized static DataMethod getInstance() {
         return instance;
     }
 
-    public void insertSet(final String name){
+    void insertSet(final String name){
         final Cursor cursor = database.rawQuery("SELECT * FROM " + SET_TABLE + " WHERE name = '"
                 + name + "';",  null);
         if(cursor.getCount()>0){
@@ -34,8 +34,7 @@ public class DataMethod {
                 + "(name) VALUES('" + name + "')");
     }
 
-    public void addNewWord(final Word word){
-        Log.d("WPLogs","Try to add new word in DB");
+    void addNewWord(final Word word){
         final Cursor cursor = database.rawQuery("SELECT * FROM " + WORD_TABLE + " WHERE word = '"
                 + word.getWord() + "';",  null);
         if(cursor.getCount()>0){
@@ -49,28 +48,46 @@ public class DataMethod {
                 + " (word, translation) VALUES( " + values + " )");
     }
 
-    public void insertWord(final String word, final String translation){
+    void insertWord(final String word, final String translation){
         String values = "'" + word + "','" + translation + "'";
         database.execSQL("INSERT INTO " + WORD_TABLE
                 + " (word, translation) VALUES( " + values + " )");
     }
 
-    public void createWordInSet(final Word word, final String setName){
+    void createWordInSet(final Word word, final String setName){
+        if(word.getId()==null) {
+            Cursor cursor = database.rawQuery("SELECT * FROM " + WORD_TABLE + " WHERE word = '"
+                    + word.getWord() + "';", null);
+
+            if(cursor.getCount()==0){
+                addNewWord(word);
+                cursor = database.rawQuery("SELECT * FROM " + WORD_TABLE + " WHERE word = '"
+                        + word.getWord() + "';", null);
+            }
+
+            try {
+                while (cursor.moveToNext()) {
+                    word.setId(cursor.getInt(cursor.getColumnIndex("id")));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
         final String values = "'" + setName + "'," + word.getId() + ",'"+word.getWord() + "', 0";
         database.execSQL(" INSERT INTO " + WORDS_TO_SETS_TABLE + " (setName, wordId, word, isCorrect) "
                 + "VALUES ( " + values + " );");
     }
 
-    public void makeWordCorrect(final String setName, final String word){
+    void makeWordCorrect(final String setName, final String word){
         //TODO - следует использовать id слова и вообще всю логику работы со словами вести через
         //TODO классы Word и WordSet
         //FIXME - если пользователь создаст два перевода одного слова и добавит их в один сет, то
         //FIXME все они будут отмечаться как корректные по одному запросу
-        database.execSQL("UPDATE " + WORDS_TO_SETS_TABLE + " SET isCorrect = 1 WHERE word = "
-                + word + " AND setName = '"+setName+"';");
+        database.execSQL("UPDATE " + WORDS_TO_SETS_TABLE + " SET isCorrect = 1 WHERE word = '"
+                + word + "' AND setName = '"+setName+"';");
     }
 
-    public ArrayList<Word> getAllWords(){
+    ArrayList<Word> getAllWords(){
         Cursor cursor = database.rawQuery("Select * FROM Words;", null);
         if(cursor == null) {
             return null;
@@ -92,7 +109,7 @@ public class DataMethod {
 
     }
 
-    public WordSet getSetInfo(final String name) {
+    WordSet getSetInfo(final String name) {
         Cursor cursor = database.rawQuery("SELECT * FROM  WordsToSets WTS LEFT OUTER JOIN Words W" +
                 " ON WTS.wordId = W.id WHERE WTS.setName = '" + name + "';", null);
         if(cursor == null){
@@ -101,10 +118,10 @@ public class DataMethod {
 
         WordSet tmp = new WordSet();
         tmp.setName(name);
-        String word, translation;
-        int correct = 0;
         try {
             while (cursor.moveToNext()) {
+                String word, translation;
+                int correct;
                 word = cursor.getString(cursor.getColumnIndex("word"));
                 translation = cursor.getString(cursor.getColumnIndex("translation"));
                 tmp.addWord(word, translation);
@@ -112,6 +129,7 @@ public class DataMethod {
                 if (correct != 0) {
                     tmp.markWordCorrect(word);
                 }
+
             }
         } finally {
             cursor.close();
@@ -119,7 +137,7 @@ public class DataMethod {
         return tmp;
     }
 
-    public ArrayList<WordSet> getLastSavedSets() {
+    ArrayList<WordSet> getLastSavedSets() {
         Cursor cursor = database.rawQuery("SELECT name FROM " + SET_TABLE + ";", null);
         if(cursor == null){
             return null;

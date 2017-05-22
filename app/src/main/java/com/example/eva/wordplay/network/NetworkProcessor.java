@@ -9,15 +9,13 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
 
-public class NetworkProcessor {
+class NetworkProcessor {
     private final static String LOG_TAG = NetworkProcessor.class.getSimpleName();
-
-    //private final static Map<String, String> mCache = new Hashtable<>();
 
     private static ArrayList<WordSet> allDeckCache;
 
 
-    public static ArrayList<WordSet> processAllDecks() throws IOException {
+    static ArrayList<WordSet> processAllDecks() throws IOException {
         if (allDeckCache!=null) {
             Log.i(LOG_TAG, "Text was found in cache. Returning.");
             return allDeckCache;
@@ -31,7 +29,7 @@ public class NetworkProcessor {
         }
     }
 
-    public static WordSet processSet(WordSet targetSet) throws IOException{
+    static WordSet processSet(WordSet targetSet) throws IOException{
         return new NetworkRest().loadSet(targetSet);
     }
 }
