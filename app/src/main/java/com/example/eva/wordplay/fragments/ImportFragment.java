@@ -87,7 +87,6 @@ public class ImportFragment extends Fragment implements  NetworkHelper.ResultLis
         while(it.hasNext()){
             HashMap.Entry pair = (HashMap.Entry)it.next();
             Word wordObj = new Word((String)pair.getKey(), (String)pair.getValue());
-            DataHelper.getInstance(getActivity()).addWord(getActivity(),wordObj,this);
             words.add(wordObj);
         }
         DataHelper.getInstance(getActivity()).createNewSet(getActivity(), words, targetSet.getName(), this);

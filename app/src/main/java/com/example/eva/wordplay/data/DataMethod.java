@@ -56,8 +56,15 @@ public class DataMethod {
 
     void createWordInSet(final Word word, final String setName){
         if(word.getId()==null) {
-            final Cursor cursor = database.rawQuery("SELECT * FROM " + WORD_TABLE + " WHERE word = '"
+            Cursor cursor = database.rawQuery("SELECT * FROM " + WORD_TABLE + " WHERE word = '"
                     + word.getWord() + "';", null);
+
+            if(cursor.getCount()==0){
+                addNewWord(word);
+                cursor = database.rawQuery("SELECT * FROM " + WORD_TABLE + " WHERE word = '"
+                        + word.getWord() + "';", null);
+            }
+
             try {
                 while (cursor.moveToNext()) {
                     word.setId(cursor.getInt(cursor.getColumnIndex("id")));
