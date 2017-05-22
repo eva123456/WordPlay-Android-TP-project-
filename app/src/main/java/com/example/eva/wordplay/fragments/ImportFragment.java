@@ -55,6 +55,12 @@ public class ImportFragment extends Fragment implements  NetworkHelper.ResultLis
         return view;
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        NetworkHelper.getInstance(getActivity()).removeListener(this);
+    }
+
     private void loadDeck(String deckName){
         if(!deckName.isEmpty()) {
             WordSet targetSet = new WordSet();

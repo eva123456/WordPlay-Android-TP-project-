@@ -1,9 +1,8 @@
 package com.example.eva.wordplay.fragments;
 
-import android.support.annotation.IntegerRes;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.ShareCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -40,14 +39,12 @@ public class CreationFragment extends Fragment implements View.OnClickListener,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        //SharedPreferences preferences;
         view = inflater.inflate(R.layout.create_edit_deck_fragment, null);
         btnSave = (Button) view.findViewById(R.id.createDeck);
         btnSave.setOnClickListener(this);
         deckNameView = (EditText) view.findViewById(R.id.deckName);
-
         DataHelper.getInstance(getActivity()).getAllWords(getActivity(), this);
-
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         return view;
 
