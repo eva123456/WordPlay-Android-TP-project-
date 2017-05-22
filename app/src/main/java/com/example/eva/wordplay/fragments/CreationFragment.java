@@ -39,7 +39,6 @@ public class CreationFragment extends Fragment implements View.OnClickListener,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //SharedPreferences preferences;
         view = inflater.inflate(R.layout.create_edit_deck_fragment, null);
         btnSave = (Button) view.findViewById(R.id.createDeck);
         btnSave.setOnClickListener(this);
@@ -95,7 +94,7 @@ public class CreationFragment extends Fragment implements View.OnClickListener,
         if(success){
             allWords = result;
             isPicked = new ArrayList<>(Collections.nCopies(result.size(), false));
-            adapter = new WordRecyclerAdapter(result, isPicked);
+            adapter = new WordRecyclerAdapter(allWords, isPicked);
             recyclerView.setAdapter(adapter);
             layoutManager = new LinearLayoutManager(getActivity());
             recyclerView.setLayoutManager(layoutManager);
@@ -114,6 +113,7 @@ public class CreationFragment extends Fragment implements View.OnClickListener,
     public void onStringResult(boolean success, String result) {
         if(success) {
             Toast.makeText(getActivity(), "Set successfully saved", Toast.LENGTH_SHORT).show();
+            //adapter.notifyItemInserted();
             //TODO - по идее, после этого надо перебросить юзера на экран со списокм сетов
         } else {
             Toast.makeText(getActivity(), "Probably, this name for set is busy. Try another.", Toast.LENGTH_SHORT).show();

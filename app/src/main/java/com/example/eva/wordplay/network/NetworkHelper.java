@@ -94,7 +94,6 @@ public class NetworkHelper {
 
     public interface ResultListener {
         void onServerSetListResult(final ArrayList<WordSet> serverSets);
-
         void onDeckLoadedResult(final boolean success, WordSet targetSet);
     }
 }
