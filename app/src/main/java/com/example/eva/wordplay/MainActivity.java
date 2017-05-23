@@ -5,7 +5,9 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -21,16 +23,25 @@ import com.example.eva.wordplay.fragments.AddWordFragment;
 import com.example.eva.wordplay.fragments.BaseFragment;
 import com.example.eva.wordplay.fragments.CreationFragment;
 import com.example.eva.wordplay.fragments.ImportFragment;
+import com.example.eva.wordplay.fragments.NavigationFragment;
 import com.example.eva.wordplay.fragments.WordPlayFragment;
+import com.mikepenz.iconics.typeface.FontAwesome;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 
+import static com.example.eva.wordplay.R.array.navigationItems;
 import static java.lang.String.valueOf;
 
-public class MainActivity extends AppCompatActivity implements BaseFragment.CheckBeginListener, WordPlayFragment.DeckListener{
+public class MainActivity extends AppCompatActivity implements BaseFragment.CheckBeginListener,
+        WordPlayFragment.DeckListener, NavigationFragment.FragmentDrawerListener{
 
     private final String TAG = MainActivity.class.getSimpleName();
 
-    private String[] navigationItems;
-    private DrawerLayout drawerLayout;
+    //private String[] navigationItems;
+    //private DrawerLayout drawerLayout;
     private ListView listView;
 
     private Integer fragmentContainer;
@@ -40,7 +51,9 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
     private ImportFragment importPage;
     private AboutFragment aboutPage;
     private WordPlayFragment checkPage;
-    private AddWordFragment addWordFragment;
+
+    private Toolbar toolbar;
+    private NavigationFragment navigationFragment;
 
     private static int currentFragmentIndex;
 
@@ -49,14 +62,22 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        navigationItems = getResources().getStringArray(R.array.navigationItems);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        listView = (ListView) findViewById(R.id.navigationDrawer);
+       // navigationItems = getResources().getStringArray(R.array.navigationItems);
+       // drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+       // listView = (ListView) findViewById(R.id.navigationDrawer);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        navigationFragment = (NavigationFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+        navigationFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
+        navigationFragment.setDrawerListener(this);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
         fragmentContainer = R.id.content;
 
-        listView.setAdapter(new ArrayAdapter<>(this, R.layout.navigation_item, navigationItems));
-        listView.setOnItemClickListener(new NavigationDrawerListener());
+      //  listView.setAdapter(new ArrayAdapter<>(this, R.layout.navigation_item, navigationItems));
+       // listView.setOnItemClickListener(new NavigationDrawerListener());
 
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -92,9 +113,6 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
         CreationFragment creationFragment = CreationFragment.class.getSimpleName().equals(existingFragmentClass)
                 ? (CreationFragment) fragmentManager.findFragmentById(R.id.content):null;
 
-        AddWordFragment addWordFragment = AddWordFragment.class.getSimpleName().equals(existingFragmentClass)
-                ? (AddWordFragment) fragmentManager.findFragmentById(R.id.content):null;
-
         if(aboutFragment!=null){
             aboutPage = aboutFragment;
             currentFragmentIndex = 3;
@@ -104,13 +122,10 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
         } else if(importFragment!=null) {
             importPage = importFragment;
             currentFragmentIndex = 2;
-        } else if(creationFragment!=null){
+        } else if(creationFragment!=null) {
             creationPage = creationFragment;
             currentFragmentIndex = 1;
-        } else if(addWordFragment!=null){
-            currentFragmentIndex = 4;
         }
-
     }
 
     private void setPage(Fragment fragment){
@@ -165,8 +180,51 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
         setPage(basePage);
     }
 
+    @Override
+    public void onDrawerItemSelected(View view, int position) {
+        itemSelected(position);
+    }
 
-    public class NavigationDrawerListener implements AdapterView.OnItemClickListener {
+    private void itemSelected(int position){
+
+        Fragment[] pages = {basePage, creationPage, importPage, aboutPage};
+
+        if(currentFragmentIndex != position) {
+            if(pages[currentFragmentIndex]!=null) {
+                clearContainer(pages[currentFragmentIndex]);
+            }
+            switch(position){
+                case 0:
+                    basePage = basePage == null ? new BaseFragment() : basePage;
+                    basePage.registerWPCallback(MainActivity.this);
+                    setPage(basePage);
+                    break;
+                case 1:
+                    creationPage = creationPage == null ? new CreationFragment() : creationPage;
+                    setPage(creationPage);
+                    break;
+                case 2:
+                    importPage = importPage == null ? new ImportFragment() : importPage;
+                    setPage(importPage);
+                    break;
+                case 3:
+                    aboutPage = aboutPage == null ? new AboutFragment() : aboutPage;
+                    setPage(aboutPage);
+                    break;
+            }
+            currentFragmentIndex = position;
+        }
+
+        //getSupportActionBar().setTitle(title);
+
+       /* listView.setItemChecked(position, true);
+        setTitle(navigationItems[position]);
+        drawerLayout.closeDrawer(listView);*/
+
+    }
+
+
+   /* public class NavigationDrawerListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             selectItem(position);
@@ -174,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
 
         private void selectItem(int position) {
 
-            Fragment[] pages = {basePage, creationPage, importPage, aboutPage, addWordFragment};
+            Fragment[] pages = {basePage, creationPage, importPage, aboutPage};
 
             if(currentFragmentIndex != position) {
                 if(pages[currentFragmentIndex]!=null) {
@@ -198,10 +256,6 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
                         aboutPage = aboutPage == null ? new AboutFragment() : aboutPage;
                         setPage(aboutPage);
                         break;
-                    case 4:
-                        addWordFragment = addWordFragment==null ? new AddWordFragment() : addWordFragment;
-                        setPage(addWordFragment);
-                        break;
                 }
                 currentFragmentIndex = position;
             }
@@ -211,5 +265,5 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
             drawerLayout.closeDrawer(listView);
 
         }
-    }
+    }*/
 }

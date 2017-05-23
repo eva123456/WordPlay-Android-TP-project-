@@ -8,7 +8,7 @@
         android:id="@+id/setItem"
         android:layout_width="240dp"
         android:layout_height="62dp"
-        android:textColor="@color/colorText"
+        android:textColor="@color/textColorPrimary"
         android:layout_gravity="center_horizontal"
         style="@style/Widget.AppCompat.Button.Colored"
         android:textStyle="normal|bold"

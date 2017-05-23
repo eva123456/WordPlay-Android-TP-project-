@@ -1,10 +1,19 @@
 <resources>
-    <string name="app_name">WordPlay</string>
+   <!-- <string name="app_name">WordPlay</string>-->
     <string name="create">Create new set</string>
     <string name="addWord">Add word</string>
     <string name="noSets">You have no sets yet...\n Create new set or import it</string>
-    <string name="about">About us</string>
-    <string name="importDeck">Here you can import a simple deck</string>
+    <string name="about">This is simple android application that was made as Technopark project.\n
+        Application allows you to create sets of foreign words with a translation that you want to learn.</string>
     <string name="startWP">This page is about to start checking words from the deck</string>
     <string name="backURL">https://glacial-everglades-25374.herokuapp.com</string>
+    <string name="importDeck">Here you can download a prepared set of words from our server</string>
+
+ <string name="app_name">Word Play</string>
+ <string name="action_settings">Settings</string>
+ <string name="action_search">Search</string>
+ <string name="drawer_open">Open</string>
+ <string name="drawer_close">Close</string>
+
+
 </resources>

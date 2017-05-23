@@ -65,7 +65,7 @@
         android:layout_marginTop="16dp"
         android:id="@+id/addWord"
         android:text="Create"
-        android:textColor="@color/colorText"
+        android:textColor="@color/textColorPrimary"
         style="@style/Widget.AppCompat.Button.Colored"
         android:textStyle="normal|bold"
         android:layout_below="@id/translationLayout"

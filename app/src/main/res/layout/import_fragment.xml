@@ -4,16 +4,18 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:text="@string/importDeck"
-        android:layout_gravity="center_vertical"
-        android:textStyle="normal|bold"
-        android:textAlignment="center"
-        android:textSize="24sp" />
+        android:layout_below="@id/label"
+        android:layout_centerInParent="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:text="@string/importDeck" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerViewImport"
+        android:layout_marginTop="8dp"
         android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

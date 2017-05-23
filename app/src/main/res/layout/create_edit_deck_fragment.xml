@@ -33,7 +33,7 @@
         android:layout_margin="8dp"
         android:id="@+id/new_Word"
         android:text="create new word"
-        android:textColor="@color/colorText"
+        android:textColor="@color/textColorPrimary"
         style="@style/Widget.AppCompat.Button.Colored"
         android:textStyle="normal|bold"
         android:background="@drawable/round_corners" />
@@ -94,7 +94,7 @@
         android:layout_margin="8dp"
         android:id="@+id/createDeck"
         android:text="Save deck!"
-        android:textColor="@color/colorText"
+        android:textColor="@color/textColorPrimary"
         style="@style/Widget.AppCompat.Button.Colored"
         android:textStyle="normal|bold"
         android:background="@drawable/round_corners" />
