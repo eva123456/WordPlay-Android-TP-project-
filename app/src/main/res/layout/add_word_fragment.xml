@@ -4,72 +4,44 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/deckCard"
-        android:layout_margin="16dp"
-        >
+        style="@style/cardViewStyle">
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:layout_gravity="center">
+            style="@style/addWordRelativeLayout">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="8dp"
+        style="@style/textLayout"
         android:id="@+id/wordLayout">
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Word"
-            android:textSize="18sp"
+            android:text="@string/wordLabel"
             android:layout_weight="1"
-            android:textStyle="normal|bold" />
+            style="@style/textLabel18" />
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
             android:layout_weight="1"
-            android:id="@+id/wordInput" />
+            android:id="@+id/wordInput"
+            style="@style/textLabel18" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="8dp"
+        style="@style/textLayout"
         android:layout_below="@id/wordLayout"
         android:id="@+id/translationLayout">
         <TextView
             android:id="@+id/translation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Translation"
+            android:text="@string/translationInputLabel"
             android:layout_weight="1"
-            android:textSize="18sp"
-            android:textStyle="normal|bold" />
+            style="@style/textLabel18"/>
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/translationInput"
-            android:textSize="18sp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            style="@style/textLabel18"/>
     </LinearLayout>
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
         android:id="@+id/addWord"
-        android:text="Create"
-        android:textColor="@color/textColorPrimary"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:textStyle="normal|bold"
-        android:layout_below="@id/translationLayout"
-        android:background="@drawable/round_corners">
+        android:text="@string/createWord"
+        style="@style/BigButtonStyle"
+        android:layout_below="@id/translationLayout">
     </Button>
 
 </RelativeLayout>

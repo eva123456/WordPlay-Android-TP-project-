@@ -15,5 +15,16 @@
  <string name="drawer_open">Open</string>
  <string name="drawer_close">Close</string>
 
-
+    <string name="wordLabel">Word</string>
+    <string name="translationInputLabel">Translation</string>
+    <string name="createWord">Create</string>
+    <string name="createNewWord">Create new word</string>
+    <string name="deckNameLabel">Deck name</string>
+    <string name="saveDeck">Save deck</string>
+    <string name="translationLabelRus">Перевод</string>
+    <string name="someWordLabel"> Some word </string>
+    <string name="someTranslationLabel"> Some word translation</string>
+    <string name="okButton"> OK </string>
+    <string name="failButton"> FAIL </string>
+    <string name="hintButton"> HINT </string>
 </resources>

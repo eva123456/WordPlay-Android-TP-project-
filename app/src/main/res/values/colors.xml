@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!---<color name="colorPrimary">#95002B</color>
-    <color name="colorPrimaryDark">#5e041e</color>
-    <color name="colorAccent">#bf2652</color>
-    <color name="colorBackground">#797677</color>
-    <color name="colorText">#fcfcfc</color> -->
+ 
+    <color name="colorText">#fcfcfc</color>
     <color name="colorPrimary">#F50057</color>
     <color name="colorPrimaryDark">#C51162</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>
     <color name="colorAccent">#FF80AB</color>
+    <color name="pickedWord">#FFFF88</color>
+    <color name="unpickedWord">#ffffff</color>
 </resources>

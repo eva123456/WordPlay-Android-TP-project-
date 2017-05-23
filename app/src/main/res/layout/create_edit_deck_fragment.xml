@@ -6,98 +6,40 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/deckNameLayout"
-        android:layout_margin="8dp"
+        style="@style/deckNameTextLayout"
         android:layout_weight="0">
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Deck name"
+            android:text="@string/deckNameLabel"
             android:layout_weight="1"
-            android:textStyle="normal|bold"
-            android:textSize="24sp" />
+            style="@style/textLabel24" />
         <EditText
             android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/deckName"
-            />
+            style="@style/textLabel24" />
     </LinearLayout>
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_margin="8dp"
         android:id="@+id/new_Word"
-        android:text="create new word"
-        android:textColor="@color/textColorPrimary"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:textStyle="normal|bold"
-        android:background="@drawable/round_corners" />
+        android:text="@string/createNewWord"
+        style="@style/BigButtonStyle" />
 
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/new_word_fragment"
-        android:visibility="gone">
+        style="@style/createDeckFrameStyle">
     </FrameLayout>
 
-    <!---<LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/new_word_layout"
-        android:visibility="gone">
-        <fragment
-            android:id="@+id/new_word_fragment"
-            android:name="com.example.eva.wordplay.fragments.AddWordFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:layout="@layout/add_word_fragment">
-        </fragment>
-    </LinearLayout>-->
 
-
-
-    <!-- <android.support.design.widget.CoordinatorLayout
-         xmlns:android="http://schemas.android.com/apk/res/android"
-         xmlns:app="http://schemas.android.com/apk/res-auto"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"> -->
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_margin="8dp"
-            android:scrollbars="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-     <!--   <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:clickable="true"
-            app:layout_anchor="@id/recyclerView"
-            app:layout_anchorGravity="bottom|right|end"/>
-
-    </android.support.design.widget.CoordinatorLayout> -->
-
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        style="@style/wordRecyclerViewStyle"
+        android:layout_weight="1" />
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_margin="8dp"
         android:id="@+id/createDeck"
-        android:text="Save deck!"
-        android:textColor="@color/textColorPrimary"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:textStyle="normal|bold"
-        android:background="@drawable/round_corners" />
+        android:text="@string/saveDeck"
+        style="@style/BigButtonStyle" />
 
 
 </LinearLayout>

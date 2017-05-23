@@ -1,5 +1,6 @@
 package com.example.eva.wordplay.fragments;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -43,7 +44,7 @@ class WordRecyclerAdapter extends RecyclerView.Adapter<WordRecyclerAdapter.ViewH
         }
 
         void pickWord() {
-            layout.setBackgroundColor(Color.parseColor("#FFFF88"));
+            layout.setBackgroundColor(Color.parseColor("#ffff88"));
         }
 
         void unpickWord() {

@@ -48,10 +48,13 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
     private ImportFragment importPage;
     private AboutFragment aboutPage;
     private WordPlayFragment checkPage;
+<<<<<<< HEAD
 
     private Toolbar toolbar;
     private NavigationFragment navigationFragment;
     private DrawerLayout drawerLayout;
+=======
+>>>>>>> ec4fa8d05bcb65d52cc2d115bc9d5cd111e0606a
 
     private static int currentFragmentIndex;
 
@@ -195,7 +198,46 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
         itemSelected(position);
     }
 
+<<<<<<< HEAD
     private void itemSelected(int position){
+=======
+    public class NavigationDrawerListener implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItem(position);
+        }
+
+        private void selectItem(int position) {
+
+            Fragment[] pages = {basePage, creationPage, importPage, aboutPage};
+
+            if(currentFragmentIndex != position) {
+                if(pages[currentFragmentIndex]!=null) {
+                    clearContainer(pages[currentFragmentIndex]);
+                }
+                switch(position){
+                    case 0:
+                        basePage = basePage == null ? new BaseFragment() : basePage;
+                        basePage.registerWPCallback(MainActivity.this);
+                        setPage(basePage);
+                        break;
+                    case 1:
+                        creationPage = creationPage == null ? new CreationFragment() : creationPage;
+                        setPage(creationPage);
+                        break;
+                    case 2:
+                        importPage = importPage == null ? new ImportFragment() : importPage;
+                        setPage(importPage);
+                        break;
+                    case 3:
+                        aboutPage = aboutPage == null ? new AboutFragment() : aboutPage;
+                        setPage(aboutPage);
+                        break;
+
+                }
+                currentFragmentIndex = position;
+            }
+>>>>>>> ec4fa8d05bcb65d52cc2d115bc9d5cd111e0606a
 
         Fragment[] pages = {basePage, creationPage, importPage, aboutPage};
 
