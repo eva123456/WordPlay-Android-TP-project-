@@ -7,4 +7,16 @@
     <string name="importDeck">Here you can import a simple deck</string>
     <string name="startWP">This page is about to start checking words from the deck</string>
     <string name="backURL">https://glacial-everglades-25374.herokuapp.com</string>
+    <string name="wordLabel">Word</string>
+    <string name="translationInputLabel">Translation</string>
+    <string name="createWord">Create</string>
+    <string name="createNewWord">Create new word</string>
+    <string name="deckNameLabel">Deck name</string>
+    <string name="saveDeck">Save deck</string>
+    <string name="translationLabelRus">Перевод</string>
+    <string name="someWordLabel"> Some word </string>
+    <string name="someTranslationLabel"> Some word translation</string>
+    <string name="okButton"> OK </string>
+    <string name="failButton"> FAIL </string>
+    <string name="hintButton"> HINT </string>
 </resources>

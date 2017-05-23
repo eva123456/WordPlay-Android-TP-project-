@@ -14,12 +14,11 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/baseFrame">
+        android:id="@+id/baseFrame"
+        android:layout_marginTop="8dp">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
-            android:scrollbars="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            style="@style/recyclerViewStyle"/>
     </FrameLayout>
 
 </LinearLayout>

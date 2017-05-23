@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:padding="6dp"
     >
     <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/words"
-        android:layout_margin="4dp"
-        >
+        style="@style/listItem">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -19,7 +15,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Word"
+                android:text="@string/wordLabel"
                 android:id="@+id/word"
                 android:layout_weight="1"
                 android:textStyle="normal|bold"
@@ -30,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/translation"
-                android:text="Перевод"
+                android:text="@string/translationLabelRus"
                 android:layout_weight="1"
                 android:textStyle="normal|bold"
                 android:textSize="24sp" />
