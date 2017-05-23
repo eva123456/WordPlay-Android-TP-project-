@@ -60,7 +60,6 @@ public class AddWordFragment extends Fragment implements View.OnClickListener, D
     @Override
     public void onStringResult(boolean success, String result) {
         if(success) {
-            Toast.makeText(getActivity(), "Word successfully added.", Toast.LENGTH_SHORT).show();
             Word word = new Word(wordEdit.getText().toString(), translationEdit.getText().toString(), null);
             listener.onWordCreated(word);
         } else {

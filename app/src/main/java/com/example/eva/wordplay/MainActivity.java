@@ -4,12 +4,14 @@ package com.example.eva.wordplay;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.AdapterView;
@@ -38,12 +40,7 @@ import static java.lang.String.valueOf;
 public class MainActivity extends AppCompatActivity implements BaseFragment.CheckBeginListener,
         WordPlayFragment.DeckListener, NavigationFragment.FragmentDrawerListener{
 
-    private final String TAG = MainActivity.class.getSimpleName();
-
-    //private String[] navigationItems;
-    //private DrawerLayout drawerLayout;
-    private ListView listView;
-
+    private String[] navigationItems;
     private Integer fragmentContainer;
 
     private CreationFragment creationPage;
@@ -54,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
 
     private Toolbar toolbar;
     private NavigationFragment navigationFragment;
+    private DrawerLayout drawerLayout;
 
     private static int currentFragmentIndex;
 
@@ -62,24 +60,18 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       // navigationItems = getResources().getStringArray(R.array.navigationItems);
-       // drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-       // listView = (ListView) findViewById(R.id.navigationDrawer);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         navigationFragment = (NavigationFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         navigationFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationFragment.setDrawerListener(this);
+        navigationItems = getResources().getStringArray(R.array.navigationItems);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
         fragmentContainer = R.id.content;
-
-      //  listView.setAdapter(new ArrayAdapter<>(this, R.layout.navigation_item, navigationItems));
-       // listView.setOnItemClickListener(new NavigationDrawerListener());
-
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment currentFragment = fragmentManager.findFragmentById(R.id.content);
 
@@ -94,6 +86,26 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
         if(basePage != null){
             basePage.registerWPCallback(this);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == android.R.id.home){
+            drawerLayout.openDrawer(GravityCompat.START);
+            return true;
+        }
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void checkExistingFragment(){
@@ -153,7 +165,6 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
 
     @Override
     public void onStartDeckCheck(WordSet set) {
-        // FIXME: 03.05.17
         if(basePage != null){
             clearContainer(basePage);
             basePage = null;
@@ -171,7 +182,6 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
 
     @Override
     public void onCheckFinish() {
-        Toast.makeText(this, " You finished this deck!", Toast.LENGTH_LONG).show();
         clearContainer(checkPage);
         if(basePage == null){
             basePage = new BaseFragment();
@@ -215,55 +225,6 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Chec
             currentFragmentIndex = position;
         }
 
-        //getSupportActionBar().setTitle(title);
-
-       /* listView.setItemChecked(position, true);
-        setTitle(navigationItems[position]);
-        drawerLayout.closeDrawer(listView);*/
-
+        getSupportActionBar().setTitle(navigationItems[position]);
     }
-
-
-   /* public class NavigationDrawerListener implements AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
-        }
-
-        private void selectItem(int position) {
-
-            Fragment[] pages = {basePage, creationPage, importPage, aboutPage};
-
-            if(currentFragmentIndex != position) {
-                if(pages[currentFragmentIndex]!=null) {
-                    clearContainer(pages[currentFragmentIndex]);
-                }
-                switch(position){
-                    case 0:
-                        basePage = basePage == null ? new BaseFragment() : basePage;
-                        basePage.registerWPCallback(MainActivity.this);
-                        setPage(basePage);
-                        break;
-                    case 1:
-                        creationPage = creationPage == null ? new CreationFragment() : creationPage;
-                        setPage(creationPage);
-                        break;
-                    case 2:
-                        importPage = importPage == null ? new ImportFragment() : importPage;
-                        setPage(importPage);
-                        break;
-                    case 3:
-                        aboutPage = aboutPage == null ? new AboutFragment() : aboutPage;
-                        setPage(aboutPage);
-                        break;
-                }
-                currentFragmentIndex = position;
-            }
-
-            listView.setItemChecked(position, true);
-            setTitle(navigationItems[position]);
-            drawerLayout.closeDrawer(listView);
-
-        }
-    }*/
 }
