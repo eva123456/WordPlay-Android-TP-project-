@@ -6,16 +6,14 @@
     tools:context=".MainActivity"
    >
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        style="@style/baseTextView"
         android:id="@+id/tvForEmptySet"
         />
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        style="@style/baseFrameStyle"
         android:id="@+id/baseFrame"
         android:layout_marginTop="8dp">
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
             style="@style/recyclerViewStyle"/>

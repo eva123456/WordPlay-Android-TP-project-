@@ -6,28 +6,17 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/deckNameLayout"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="8dp"
+        style="@style/deckNameTextLayout"
         android:layout_weight="0">
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:text="@string/deckNameLabel"
             android:layout_weight="1"
-            android:textStyle="normal|bold"
-            android:textSize="24sp" />
+            style="@style/textLabel24" />
         <EditText
             android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/deckName"
-            />
+            style="@style/textLabel24" />
     </LinearLayout>
 
     <Button
@@ -37,10 +26,8 @@
 
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/new_word_fragment"
-        android:visibility="gone">
+        style="@style/createDeckFrameStyle">
     </FrameLayout>
 
 

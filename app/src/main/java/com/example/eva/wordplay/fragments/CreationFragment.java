@@ -75,6 +75,7 @@ public class CreationFragment extends Fragment implements View.OnClickListener, 
         if(!isPicked.get(position)) {
             isPicked.set(position, true);
             viewHolder.pickWord();
+
         } else {
             isPicked.set(position, false);
             viewHolder.unpickWord();
@@ -125,6 +126,7 @@ public class CreationFragment extends Fragment implements View.OnClickListener, 
             recyclerView.addOnItemTouchListener(new RecyclerClickListener(getActivity()) {
                 @Override
                 public void onItemClick(RecyclerView recyclerView, View view, int position) {
+                    Log.d("WPLogs","Item clicked");
                     wordClick(recyclerView, view, position);
                 }
             });

@@ -60,6 +60,111 @@
         <item name="android:layout_marginLeft">8dp</item>
         <item name="android:layout_marginBottom">8dp</item>
         <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="deckNameTextLayout" parent="textLayout">
+        <item name="android:layout_marginTop">16dp</item>
+    </style>
+
+    <style name="textLabel">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textStyle">normal|bold</item>
+        </style>
+
+    <style name="textLabel18" parent="textLabel">
+        <item name="android:textSize">18sp</item>
+        </style>
+
+    <style name="textLabel24" parent="textLabel">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="frameStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="createDeckFrameStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="baseFrameStyle" parent="frameStyle">
+        <item name="android:padding">8dp</item>
+    </style>
+
+    <style name="baseTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textStyle">normal|bold</item>
+    </style>
+
+    <style name="cardViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">16dp</item>
+    </style>
+
+    <style name="cardRelativeLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
+    <style name="addWordRelativeLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="cardIcon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@mipmap/hat</item>
+        <item name="android:layout_marginRight">16dp</item>
+    </style>
+
+    <style name="deckNameText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:layout_alignParentTop">true</item>
+    </style>
+
+    <style name="deckPercents">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="wordCardLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:background">@color/unpickedWord</item>
+    </style>
+
+    <style name="wordCardWord">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textStyle">normal|bold</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="wordCardTranslation" parent="wordCardWord">
+        <item name="android:layout_gravity">end</item>
+        <item name="android:gravity">end</item>
+    </style>
+
+    <style name="wordplayCardView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">48dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
 
     </style>
 
